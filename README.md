@@ -1,4 +1,4 @@
-README.md
+
 # Zippy — Hyperlocal Marketplace Backend
 
 Zippy is a hyperlocal multi-vendor marketplace platform designed to connect customers with local shops and businesses, initially focused on Anantnag, Jammu & Kashmir.
@@ -64,8 +64,13 @@ Zippy uses a centralized backend architecture with role-based access control.
           PostgreSQL            Socket.IO
               │                     │
             Prisma           Live Tracking
+
+
 👥 User Roles
+
+
 Customer
+
 Customers can:
 - Register/login using OTP
 - Browse categories
@@ -77,6 +82,8 @@ Customers can:
 - Track riders in real time
 - Review purchased products
 - Update/delete their own reviews
+
+
 Shopkeeper
 Shopkeepers can:
 - Create/manage their shop
@@ -86,6 +93,8 @@ Shopkeepers can:
 - Manage inventory
 - View/manage orders
 - Update order preparation status
+
+
 Rider
 Riders can:
 - Manage rider profile
@@ -95,6 +104,7 @@ Riders can:
 - Update delivery status
 - Share live location
 - Join authorized order tracking rooms
+
 Admin
 Admins can manage:
 - Customers
@@ -281,6 +291,7 @@ GET /db-test
 
 
 🔔 Planned Web Push Notifications
+
 Zippy will support browser-based push notifications for:
 - New orders
 - Order acceptance
@@ -294,6 +305,7 @@ Notifications will work directly through supported web browsers, so a dedicated 
 
 
 💳 Planned Payments
+
 Razorpay will be integrated for online payments.
 
 Planned payment flow:
@@ -310,6 +322,7 @@ Marketplace settlement through Razorpay Route will be integrated after the requi
 
 
 🗺️ Roadmap
+
 [x] Authentication & OTP
 [x] Role-based authorization
 [x] Shops
@@ -351,11 +364,3 @@ Zippy is being developed as a modular backend where:
 📄 License
 This project is currently under private development.
 All rights reserved.
-
-### Ek correction jo maine jaan-bujhkar README mein rakhi hai
-
-**Razorpay Route ko "implemented" nahi likha**, kyunki abhi Razorpay se activation/approval pending hai. Payment module bhi abhi `Planned` hai.
-
-Aur **Push Notifications ko Web Push** ke naam se rakha hai, kyunki tumhara product currently **website-based** hai; mobile app required nahi hai.
-
-Ab isko `README.md` mein save kar do. **Uske baad hum directly Push Notifications ka Step 1 — Prisma `PushSubscription`
