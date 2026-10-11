@@ -1,0 +1,526 @@
+.rider-dashboard-page {
+  min-height: 100vh;
+  padding: 40px 24px 60px;
+  background: #f8fafc;
+  box-sizing: border-box;
+}
+
+.rider-dashboard-container {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+/* Header */
+
+.rider-dashboard-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 28px;
+}
+
+.rider-dashboard-greeting {
+  margin: 0 0 6px;
+  color: #64748b;
+  font-size: 15px;
+}
+
+.rider-dashboard-header h1 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 32px;
+  line-height: 1.2;
+}
+
+.rider-dashboard-subtitle {
+  margin: 8px 0 0;
+  color: #64748b;
+  font-size: 15px;
+}
+
+.rider-availability {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 13px 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 28px;
+  background: #ffffff;
+  color: #334155;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.rider-status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.rider-status-dot.online {
+  background: #22c55e;
+}
+
+.rider-status-dot.delivery {
+  background: #f59e0b;
+}
+
+.rider-status-dot.offline {
+  background: #94a3b8;
+}
+
+/* Error */
+
+.rider-dashboard-error {
+  margin-bottom: 20px;
+  padding: 13px 16px;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 14px;
+}
+
+/* Approval */
+
+.rider-pending-card,
+.rider-rejected-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.rider-pending-card {
+  border: 1px solid #fde68a;
+  background: #fffbeb;
+}
+
+.rider-rejected-card {
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+}
+
+.rider-pending-card h3,
+.rider-rejected-card h3 {
+  margin: 0 0 6px;
+  color: #1e293b;
+  font-size: 17px;
+}
+
+.rider-pending-card p,
+.rider-rejected-card p {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.pending-badge {
+  padding: 6px 10px;
+  border-radius: 20px;
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* Stats */
+
+.rider-dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 34px;
+}
+
+.rider-stat-card {
+  min-height: 116px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #ffffff;
+}
+
+.rider-stat-label {
+  margin-bottom: 10px;
+  color: #64748b;
+  font-size: 14px;
+  text-align: center;
+}
+
+.rider-stat-card strong {
+  color: #0f172a;
+  font-size: 26px;
+}
+
+/* Section header */
+
+.rider-section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 18px;
+}
+
+.rider-section-header h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 22px;
+}
+
+.rider-section-header p {
+  margin: 6px 0 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.rider-section-header button {
+  padding: 10px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #1e293b;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.rider-section-header button:hover {
+  background: #f8fafc;
+}
+
+/* Quick Access */
+
+.rider-quick-access {
+  margin-bottom: 34px;
+}
+
+.rider-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.rider-quick-card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #ffffff;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.rider-quick-card:hover {
+  transform: translateY(-2px);
+  border-color: #cbd5e1;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.07);
+}
+
+.rider-quick-icon {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: #f1f5f9;
+  font-size: 23px;
+}
+
+.rider-quick-card h3 {
+  margin: 0 0 5px;
+  color: #0f172a;
+  font-size: 16px;
+}
+
+.rider-quick-card p {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.rider-quick-arrow {
+  margin-left: auto;
+  color: #64748b;
+  font-size: 20px;
+}
+
+/* Availability */
+
+.rider-dashboard-actions {
+  margin-bottom: 34px;
+}
+
+.rider-action-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #ffffff;
+}
+
+.rider-action-card h2 {
+  margin: 0 0 7px;
+  color: #0f172a;
+  font-size: 20px;
+}
+
+.rider-action-card p {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.availability-button {
+  min-width: 135px;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 9px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.availability-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.online-button {
+  background: #22c55e;
+}
+
+.online-button:hover:not(:disabled) {
+  background: #16a34a;
+}
+
+.offline-button {
+  background: #ef4444;
+}
+
+.offline-button:hover:not(:disabled) {
+  background: #dc2626;
+}
+
+/* Deliveries */
+
+.rider-dashboard-deliveries {
+  margin-bottom: 20px;
+}
+
+.rider-delivery-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rider-delivery-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #ffffff;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.rider-delivery-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 20px rgba(15, 23, 42, 0.06);
+}
+
+.delivery-order-number {
+  display: inline-block;
+  margin-bottom: 7px;
+  color: #2563eb;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.rider-delivery-card h3 {
+  margin: 0 0 5px;
+  color: #0f172a;
+  font-size: 16px;
+}
+
+.rider-delivery-card p {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.delivery-card-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 9px;
+}
+
+.delivery-status {
+  padding: 7px 10px;
+  border-radius: 18px;
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.status-delivered {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-assigned {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.status-accepted {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-picked_up,
+.status-out_for_delivery {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.status-cancelled {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.delivery-card-right strong {
+  color: #0f172a;
+  font-size: 15px;
+}
+
+/* Empty */
+
+.rider-empty-card {
+  padding: 45px 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #ffffff;
+  text-align: center;
+}
+
+.rider-empty-icon {
+  margin-bottom: 10px;
+  font-size: 38px;
+}
+
+.rider-empty-card h3 {
+  margin: 0 0 6px;
+  color: #0f172a;
+}
+
+.rider-empty-card p {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* Loading */
+
+.rider-dashboard-loading {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  font-size: 15px;
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+  .rider-dashboard-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .rider-quick-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .rider-dashboard-page {
+    padding: 25px 14px 45px;
+  }
+
+  .rider-dashboard-header {
+    flex-direction: column;
+  }
+
+  .rider-dashboard-header h1 {
+    font-size: 27px;
+  }
+
+  .rider-availability {
+    align-self: flex-start;
+  }
+
+  .rider-dashboard-stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .rider-stat-card {
+    min-height: 100px;
+    padding: 14px 8px;
+  }
+
+  .rider-stat-card strong {
+    font-size: 21px;
+  }
+
+  .rider-action-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .availability-button {
+    width: 100%;
+  }
+
+  .rider-delivery-card {
+    align-items: flex-start;
+  }
+
+  .delivery-card-right {
+    flex-shrink: 0;
+  }
+}

@@ -3,9 +3,14 @@ const express = require("express");
 const {
   createOrder,
   getMyOrders,
+  getCheckoutSummary,
+  verifyPayment,
   getOrderById,
   getShopOrders,
   updateShopOrderStatus,
+  cancelOrder,
+  cancelCheckout, // NEW
+  requestRefund,
 } = require("../controllers/order.controller");
 
 const {
@@ -13,9 +18,11 @@ const {
   authorize,
 } = require("../middleware/auth.middleware");
 
+const {
+  authorizeApprovedShopkeeper,
+} = require("../middleware/shopkeeper.middleware");
+
 const router = express.Router();
-
-
 
 router.get(
   "/",
@@ -24,27 +31,80 @@ router.get(
   getMyOrders
 );
 
-
-
-
 // GET SHOP ORDERS
 router.get(
   "/shop/orders",
   authenticate,
-  authorize("SHOPKEEPER"),
+  authorizeApprovedShopkeeper,
   getShopOrders
 );
-
-
-
 
 // SHOPKEEPER - UPDATE ORDER STATUS
 router.patch(
   "/shop/:orderId/status",
   authenticate,
-  authorize("SHOPKEEPER"),
+  authorizeApprovedShopkeeper,
   updateShopOrderStatus
 );
+
+router.post(
+  "/payment/verify",
+  authenticate,
+  authorize("CUSTOMER"),
+  verifyPayment
+);
+
+
+
+
+
+
+
+
+ // CUSTOMER - CANCEL ENTIRE CHECKOUT
+router.patch(
+  "/checkout/:checkoutPaymentId/cancel",
+  authenticate,
+  authorize("CUSTOMER"),
+  cancelCheckout
+);
+
+
+
+
+
+
+// CUSTOMER - CANCEL ORDER
+router.patch(
+  "/:orderId/cancel",
+  authenticate,
+  authorize("CUSTOMER"),
+  cancelOrder
+);
+
+
+
+
+// CUSTOMER - REQUEST REFUND
+router.post(
+  "/:orderId/refund-request",
+  authenticate,
+  authorize("CUSTOMER"),
+  requestRefund
+);
+
+
+
+
+
+router.get(
+  "/summary",
+  authenticate,
+  authorize("CUSTOMER"),
+  getCheckoutSummary
+);
+
+
 
 
 
@@ -66,3 +126,93 @@ router.post(
 );
 
 module.exports = router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const express = require("express");
+
+// const {
+//   createOrder,
+//   getMyOrders,
+//   verifyPayment,
+//   getOrderById,
+//   getShopOrders,
+//   updateShopOrderStatus,
+// } = require("../controllers/order.controller");
+
+// const {
+//   authenticate,
+//   authorize,
+// } = require("../middleware/auth.middleware");
+
+// const router = express.Router();
+
+
+
+// router.get(
+//   "/",
+//   authenticate,
+//   authorize("CUSTOMER"),
+//   getMyOrders
+// );
+
+
+
+
+// // GET SHOP ORDERS
+// router.get(
+//   "/shop/orders",
+//   authenticate,
+//   authorize("SHOPKEEPER"),
+//   getShopOrders
+// );
+
+
+
+
+// // SHOPKEEPER - UPDATE ORDER STATUS
+// router.patch(
+//   "/shop/:orderId/status",
+//   authenticate,
+//   authorize("SHOPKEEPER"),
+//   updateShopOrderStatus
+// );
+
+
+
+// router.post(
+//   "/payment/verify",
+//   authenticate,
+//   authorize("CUSTOMER"),
+//   verifyPayment
+// );
+
+
+
+// // GET SINGLE ORDER
+// router.get(
+//   "/:id",
+//   authenticate,
+//   authorize("CUSTOMER"),
+//   getOrderById
+// );
+
+// router.post(
+//   "/",
+//   authenticate,
+//   authorize("CUSTOMER"),
+//   createOrder
+// );
+
+// module.exports = router;

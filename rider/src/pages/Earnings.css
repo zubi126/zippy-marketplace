@@ -1,0 +1,856 @@
+/* .rider-earnings-page {
+  min-height: 100vh;
+  padding: 32px;
+  box-sizing: border-box;
+  background: #f8fafc;
+}
+
+.rider-earnings-container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.rider-earnings-loading {
+  padding: 80px 20px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 15px;
+}
+
+.rider-earnings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.rider-earnings-header h1 {
+  margin: 0;
+  color: #111827;
+  font-size: 30px;
+}
+
+.rider-earnings-header p {
+  margin: 7px 0 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.rider-earnings-refresh {
+  padding: 10px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.rider-earnings-refresh:hover {
+  background: #f9fafb;
+}
+
+.rider-earnings-error {
+  margin-bottom: 20px;
+  padding: 12px 14px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 13px;
+}
+
+.rider-earnings-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.rider-earnings-stat-card {
+  padding: 22px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.rider-earnings-stat-card span {
+  display: block;
+  margin-bottom: 10px;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.rider-earnings-stat-card strong {
+  color: #111827;
+  font-size: 26px;
+}
+
+.rider-period-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.rider-period-card {
+  padding: 22px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.rider-period-card-header h2 {
+  margin: 0;
+  color: #111827;
+  font-size: 18px;
+}
+
+.rider-period-card-header p {
+  margin: 5px 0 0;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.rider-period-amount {
+  margin: 25px 0;
+  color: #15803d;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.rider-period-info {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 13px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.rider-period-info span {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.rider-period-info strong {
+  color: #111827;
+  font-size: 13px;
+}
+
+.rider-payouts-section {
+  padding: 22px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.rider-payouts-header {
+  margin-bottom: 18px;
+}
+
+.rider-payouts-header h2 {
+  margin: 0;
+  color: #111827;
+  font-size: 18px;
+}
+
+.rider-payouts-header p {
+  margin: 5px 0 0;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.rider-payouts-empty {
+  padding: 45px 20px;
+  text-align: center;
+}
+
+.rider-payouts-empty-icon {
+  margin-bottom: 10px;
+  font-size: 38px;
+}
+
+.rider-payouts-empty h3 {
+  margin: 0 0 6px;
+  color: #111827;
+  font-size: 16px;
+}
+
+.rider-payouts-empty p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.rider-payouts-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.rider-payout-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 15px 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.rider-payout-item:last-child {
+  border-bottom: none;
+}
+
+.rider-payout-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rider-payout-main strong {
+  color: #111827;
+  font-size: 15px;
+}
+
+.rider-payout-main span {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.rider-payout-status {
+  display: inline-flex;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  color: #4b5563;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.rider-payout-status.paid {
+  background: #f0fdf4;
+  color: #15803d;
+}
+
+.rider-payout-status.pending {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.rider-payout-status.failed {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+@media (max-width: 800px) {
+  .rider-earnings-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .rider-period-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .rider-earnings-page {
+    padding: 20px 14px;
+  }
+
+  .rider-earnings-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .rider-earnings-refresh {
+    width: 100%;
+  }
+
+  .rider-earnings-stat-card strong {
+    font-size: 23px;
+  }
+
+  .rider-period-amount {
+    font-size: 27px;
+  }
+} */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.rider-earnings-page {
+  min-height: 100vh;
+  padding: 32px;
+  box-sizing: border-box;
+  background: #f8fafc;
+}
+
+.rider-earnings-container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.rider-earnings-loading {
+  padding: 80px 20px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 15px;
+}
+
+/* Header */
+
+.rider-earnings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.rider-earnings-header h1 {
+  margin: 0;
+  color: #111827;
+  font-size: 30px;
+}
+
+.rider-earnings-header p {
+  margin: 7px 0 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.rider-earnings-refresh {
+  padding: 10px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.rider-earnings-refresh:hover {
+  background: #f9fafb;
+}
+
+/* Error */
+
+.rider-earnings-error {
+  margin-bottom: 20px;
+  padding: 12px 14px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 13px;
+}
+
+/* Balance Stats */
+
+.rider-earnings-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.rider-earnings-stat-card {
+  padding: 22px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.rider-earnings-stat-card span {
+  display: block;
+  margin-bottom: 10px;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.rider-earnings-stat-card strong {
+  color: #111827;
+  font-size: 26px;
+}
+
+/* Week / Month */
+
+.rider-period-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.rider-period-card {
+  padding: 22px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.rider-period-card-header h2 {
+  margin: 0;
+  color: #111827;
+  font-size: 18px;
+}
+
+.rider-period-card-header p {
+  margin: 5px 0 0;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.rider-period-amount {
+  margin: 25px 0;
+  color: #15803d;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.rider-period-info {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 13px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.rider-period-info span {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.rider-period-info strong {
+  color: #111827;
+  font-size: 13px;
+}
+
+/* Earnings Filter */
+
+.rider-earnings-filter {
+  margin-bottom: 24px;
+  padding: 22px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.rider-filter-header {
+  margin-bottom: 18px;
+}
+
+.rider-filter-header h2 {
+  margin: 0;
+  color: #111827;
+  font-size: 18px;
+}
+
+.rider-filter-header p {
+  margin: 5px 0 0;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+/* Filter Buttons */
+
+.rider-filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.rider-filter-buttons button {
+  padding: 10px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.rider-filter-buttons button:hover {
+  background: #f9fafb;
+}
+
+.rider-filter-buttons button.active {
+  border-color: #2563eb;
+  background: #2563eb;
+  color: #ffffff;
+}
+
+/* Custom Date Form */
+
+.rider-custom-date-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  align-items: end;
+  gap: 14px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.rider-date-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.rider-date-field label {
+  margin-bottom: 6px;
+  color: #374151;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.rider-date-field input {
+  width: 100%;
+  min-height: 40px;
+  padding: 9px 11px;
+  box-sizing: border-box;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  outline: none;
+  background: #ffffff;
+  color: #111827;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.rider-date-field input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.rider-apply-filter {
+  min-height: 40px;
+  padding: 9px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.rider-apply-filter:hover {
+  background: #1d4ed8;
+}
+
+.rider-apply-filter:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Filter Result */
+
+.rider-filter-result {
+  margin-bottom: 24px;
+  padding: 22px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.rider-filter-result-header {
+  margin-bottom: 18px;
+}
+
+.rider-filter-result-header h2 {
+  margin: 0;
+  color: #111827;
+  font-size: 18px;
+}
+
+.rider-filter-result-header p {
+  margin: 5px 0 0;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+/* Filter Summary */
+
+.rider-filter-summary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.rider-filter-summary > div {
+  padding: 16px;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.rider-filter-summary span {
+  display: block;
+  margin-bottom: 7px;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.rider-filter-summary strong {
+  color: #15803d;
+  font-size: 22px;
+}
+
+/* Individual Earnings */
+
+.rider-earning-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #f3f4f6;
+}
+
+.rider-earning-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 15px 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.rider-earning-item:last-child {
+  border-bottom: none;
+}
+
+.rider-earning-item strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #111827;
+  font-size: 15px;
+}
+
+.rider-earning-item p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.rider-earning-item > div:last-child {
+  flex-shrink: 0;
+}
+
+.rider-earning-item > div:last-child span {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+/* No Earnings */
+
+.rider-no-earnings {
+  padding: 30px 15px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+/* Payouts */
+
+.rider-payouts-section {
+  padding: 22px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.rider-payouts-header {
+  margin-bottom: 18px;
+}
+
+.rider-payouts-header h2 {
+  margin: 0;
+  color: #111827;
+  font-size: 18px;
+}
+
+.rider-payouts-header p {
+  margin: 5px 0 0;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.rider-payouts-empty {
+  padding: 45px 20px;
+  text-align: center;
+}
+
+.rider-payouts-empty-icon {
+  margin-bottom: 10px;
+  font-size: 38px;
+}
+
+.rider-payouts-empty h3 {
+  margin: 0 0 6px;
+  color: #111827;
+  font-size: 16px;
+}
+
+.rider-payouts-empty p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.rider-payouts-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.rider-payout-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 15px 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.rider-payout-item:last-child {
+  border-bottom: none;
+}
+
+.rider-payout-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rider-payout-main strong {
+  color: #111827;
+  font-size: 15px;
+}
+
+.rider-payout-main span {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.rider-payout-status {
+  display: inline-flex;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  color: #4b5563;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.rider-payout-status.paid {
+  background: #f0fdf4;
+  color: #15803d;
+}
+
+.rider-payout-status.pending {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.rider-payout-status.failed {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+/* Tablet */
+
+@media (max-width: 800px) {
+  .rider-earnings-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .rider-period-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rider-custom-date-form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .rider-apply-filter {
+    width: 100%;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .rider-earnings-page {
+    padding: 20px 14px;
+  }
+
+  .rider-earnings-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .rider-earnings-refresh {
+    width: 100%;
+  }
+
+  .rider-earnings-stat-card strong {
+    font-size: 23px;
+  }
+
+  .rider-period-amount {
+    font-size: 27px;
+  }
+
+  .rider-filter-buttons {
+    flex-direction: column;
+  }
+
+  .rider-filter-buttons button {
+    width: 100%;
+  }
+
+  .rider-custom-date-form {
+    grid-template-columns: 1fr;
+  }
+
+  .rider-filter-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .rider-earning-item {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .rider-payout-item {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+}

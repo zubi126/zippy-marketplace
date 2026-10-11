@@ -9,6 +9,12 @@ const verifyOtpSchema = z.object({
     otp: z
       .string()
       .regex(/^\d{4,6}$/, "Please enter a valid OTP"),
+
+    purpose: z.enum([
+      "CUSTOMER_REGISTRATION",
+      "SHOPKEEPER_REGISTRATION",
+      "RIDER_REGISTRATION",
+    ]),
   }),
   params: z.object({}),
   query: z.object({}),

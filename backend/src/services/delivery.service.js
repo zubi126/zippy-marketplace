@@ -8,7 +8,7 @@ const assignOrderToNearestRider = async (orderId) => {
       id: orderId,
     },
     include: {
-      delivery: true,
+      deliveries: true,
     },
   });
 
@@ -24,9 +24,9 @@ const assignOrderToNearestRider = async (orderId) => {
   }
 
   // 3. Prevent duplicate assignment
-  if (order.delivery) {
-    throw new Error("Order is already assigned to a rider");
-  }
+ if (order.deliveries && order.deliveries.length > 0) {
+  throw new Error("Order is already assigned to a rider");
+}
 
   // 4. Find nearest available rider
   const rider = await findAvailableRider(orderId);

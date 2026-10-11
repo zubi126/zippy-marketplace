@@ -1,17 +1,88 @@
 const prisma = require("../lib/prisma");
+const { Prisma } = require("@prisma/client");
+
+const cloudinary = require("../lib/cloudinary");
+
+
+
+
+const attachProductRatings = async (products) => {
+  if (!products.length) return products;
+
+  const productIds = products.map((product) => product.id);
+
+  const ratings = await prisma.review.groupBy({
+    by: ["productId"],
+    where: {
+      productId: {
+        in: productIds,
+      },
+    },
+    _avg: {
+      rating: true,
+    },
+    _count: {
+      productId: true,
+    },
+  });
+
+  const ratingMap = new Map(
+    ratings.map((item) => [
+      item.productId,
+      {
+        averageRating: Number((item._avg.rating ?? 0).toFixed(1)),
+        totalReviews: item._count.productId,
+      },
+    ])
+  );
+
+  return products.map((product) => ({
+    ...product,
+    averageRating: ratingMap.get(product.id)?.averageRating ?? 0,
+    totalReviews: ratingMap.get(product.id)?.totalReviews ?? 0,
+  }));
+};
+
+
+
+
+
+const uploadToCloudinary = (buffer) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: "mykasho/products",
+        resource_type: "image",
+      },
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      }
+    );
+
+    stream.end(buffer);
+  });
+};
+
+
+
+
+
 
 const createProduct = async (req, res) => {
   try {
-    const {
-      categoryId,
-      name,
-      slug,
-      description,
-      price,
-      imageUrl,
-      quantity,
-      lowStockThreshold,
-    } = req.body;
+const {
+  categoryId,
+  name,
+  slug,
+  description,
+  price,
+  quantity,
+  lowStockThreshold,
+} = req.body;
 
     if (!categoryId || !name || !slug || price === undefined) {
       return res.status(400).json({
@@ -19,6 +90,17 @@ const createProduct = async (req, res) => {
         message: "Category, name, slug and price are required",
       });
     }
+
+
+
+if (!req.file) {
+  return res.status(400).json({
+    success: false,
+    message: "Product image is required",
+  });
+}
+
+
 
     if (Number(price) < 0) {
       return res.status(400).json({
@@ -72,6 +154,14 @@ const createProduct = async (req, res) => {
       });
     }
 
+
+
+const uploadResult = await uploadToCloudinary(req.file.buffer);
+
+const imageUrl = uploadResult.secure_url;
+
+
+
     // Product slug is unique only within this shop
     const existingProduct = await prisma.product.findUnique({
       where: {
@@ -97,13 +187,13 @@ const createProduct = async (req, res) => {
         slug,
         description: description || null,
         price,
-        imageUrl: imageUrl || null,
-        inventory: {
-          create: {
-            quantity: quantity ?? 0,
-            lowStockThreshold: lowStockThreshold ?? 5,
-          },
-        },
+        imageUrl,
+inventory: {
+  create: {
+    quantity: Number(quantity ?? 0),
+    lowStockThreshold: Number(lowStockThreshold ?? 5),
+  },
+},
       },
       include: {
         category: true,
@@ -128,23 +218,24 @@ const createProduct = async (req, res) => {
 
 
 
-
-
-
-
 // get product 
 const getProducts = async (req, res) => {
   try {
+    const { category } = req.query;
+
     const products = await prisma.product.findMany({
       where: {
         isAvailable: true,
         shop: {
           isActive: true,
           isOpen: true,
-           verificationStatus: "APPROVED",
+          verificationStatus: "APPROVED",
         },
         category: {
           isActive: true,
+          ...(category && {
+            slug: category,
+          }),
         },
       },
       include: {
@@ -175,9 +266,14 @@ const getProducts = async (req, res) => {
       },
     });
 
+    // ⭐ CHANGE 1: attach real product ratings
+    const productsWithRatings = await attachProductRatings(products);
+
     return res.status(200).json({
       success: true,
-      products,
+
+      // ⭐ CHANGE 2: return products with ratings
+      products: productsWithRatings,
     });
   } catch (error) {
     console.error("Get products error:", error);
@@ -188,6 +284,87 @@ const getProducts = async (req, res) => {
     });
   }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+const getFeaturedProducts = async (req, res) => {
+  try {
+    const { category } = req.query;
+
+    const products = await prisma.product.findMany({
+      where: {
+        isFeatured: true,
+        isAvailable: true,
+
+        shop: {
+          isActive: true,
+          isOpen: true,
+          verificationStatus: "APPROVED",
+        },
+
+        category: {
+          isActive: true,
+          ...(category && { slug: category }),
+        },
+      },
+
+      include: {
+        category: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+          },
+        },
+        shop: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        inventory: {
+          select: {
+            quantity: true,
+            reservedQuantity: true,
+          },
+        },
+      },
+
+      orderBy: {
+        createdAt: "desc",
+      },
+
+      take: 10,
+    });
+
+    return res.status(200).json({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    console.error("Get featured products error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch featured products",
+    });
+  }
+};
+
+
+
+
+
+
 
 
 
@@ -286,16 +463,36 @@ const updateProduct = async (req, res) => {
     const { id } = req.params;
 
     const {
-      categoryId,
-      name,
-      slug,
-      description,
-      price,
-      imageUrl,
-      isAvailable,
-    } = req.body;
+  categoryId,
+  name,
+  slug,
+  description,
+  price,
+  isAvailable,
+} = req.body;
+
+
+const parsedIsAvailable =
+  isAvailable !== undefined
+    ? isAvailable === "true" || isAvailable === true
+    : undefined;
 
     const ownerId = req.user.userId;
+
+
+
+
+let imageUrl;
+
+if (req.file) {
+  const uploadResult = await uploadToCloudinary(req.file.buffer);
+  imageUrl = uploadResult.secure_url;
+}
+
+
+
+
+
 
     // Find the shop owned by the logged-in shopkeeper
     const shop = await prisma.shop.findUnique({
@@ -379,9 +576,11 @@ const updateProduct = async (req, res) => {
         ...(name !== undefined && { name }),
         ...(slug !== undefined && { slug }),
         ...(description !== undefined && { description }),
-        ...(price !== undefined && { price }),
+        ...(price !== undefined && { price: Number(price) }),
         ...(imageUrl !== undefined && { imageUrl }),
-        ...(isAvailable !== undefined && { isAvailable }),
+       ...(parsedIsAvailable !== undefined && {
+  isAvailable: parsedIsAvailable,
+}),
       },
       include: {
         category: true,
@@ -566,10 +765,15 @@ const getMyProducts = async (req, res) => {
       });
     }
 
-    const products = await prisma.product.findMany({
-      where: {
-        shopId: shop.id,
-      },
+    const { status = "active" } = req.query;
+
+const isAvailable = status !== "deleted";
+
+const products = await prisma.product.findMany({
+  where: {
+    shopId: shop.id,
+    isAvailable,
+  },
       include: {
         category: {
           select: {
@@ -635,11 +839,511 @@ const getMyProducts = async (req, res) => {
 
 
 
+
+
+
+
+
+const deleteProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const ownerId = req.user.userId;
+
+    const shop = await prisma.shop.findUnique({
+      where: {
+        ownerId,
+      },
+    });
+
+    if (!shop) {
+      return res.status(404).json({
+        success: false,
+        message: "Shop not found",
+      });
+    }
+
+    const product = await prisma.product.findFirst({
+      where: {
+        id,
+        shopId: shop.id,
+      },
+    });
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found in your shop",
+      });
+    }
+
+    const updatedProduct = await prisma.product.update({
+      where: {
+        id: product.id,
+      },
+      data: {
+        isAvailable: false,
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Product deleted successfully",
+      product: updatedProduct,
+    });
+  } catch (error) {
+    console.error("Delete product error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+    });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+const searchProducts = async (req, res) => {
+  try {
+    const { q, category } = req.query;
+
+    const page = Math.max(Number(req.query.page) || 1, 1);
+    const limit = Math.min(
+      Math.max(Number(req.query.limit) || 20, 1),
+      100
+    );
+
+    const skip = (page - 1) * limit;
+
+    if (!q || !q.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Search query is required",
+      });
+    }
+
+    const search = q.trim();
+
+    const where = {
+      isAvailable: true,
+
+      shop: {
+        isActive: true,
+        isOpen: true,
+        verificationStatus: "APPROVED",
+      },
+
+      category: {
+        isActive: true,
+        ...(category && {
+          slug: category,
+        }),
+      },
+
+      OR: [
+        {
+          name: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+        {
+          description: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+      ],
+    };
+
+    const [products, total] = await prisma.$transaction([
+      prisma.product.findMany({
+        where,
+        include: {
+          shop: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+              isOpen: true,
+            },
+          },
+          category: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+            },
+          },
+          inventory: {
+            select: {
+              quantity: true,
+              reservedQuantity: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        skip,
+        take: limit,
+      }),
+
+      prisma.product.count({
+        where,
+      }),
+    ]);
+
+    // ⭐ Added: attach real ratings to search results
+    const productsWithRatings = await attachProductRatings(products);
+
+    const totalPages = Math.ceil(total / limit);
+
+    return res.status(200).json({
+      success: true,
+      search: search,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPreviousPage: page > 1,
+      },
+      products: productsWithRatings,
+    });
+  } catch (error) {
+    console.error("Search products error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+    });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+const filterProducts = async (req, res) => {
+  try {
+    const {
+      categoryId,
+      shopId,
+      minPrice,
+      maxPrice,
+      inStock,
+    } = req.query;
+
+    const page = Math.max(Number(req.query.page) || 1, 1);
+    const limit = Math.min(
+      Math.max(Number(req.query.limit) || 20, 1),
+      100
+    );
+
+    const skip = (page - 1) * limit;
+
+    // Validate price filters
+    if (minPrice !== undefined && Number.isNaN(Number(minPrice))) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid minPrice",
+      });
+    }
+
+    if (maxPrice !== undefined && Number.isNaN(Number(maxPrice))) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid maxPrice",
+      });
+    }
+
+    if (
+      minPrice !== undefined &&
+      maxPrice !== undefined &&
+      Number(minPrice) > Number(maxPrice)
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "minPrice cannot be greater than maxPrice",
+      });
+    }
+
+    // Validate inStock
+    if (
+      inStock !== undefined &&
+      inStock !== "true" &&
+      inStock !== "false"
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "inStock must be true or false",
+      });
+    }
+
+    // Find products based on actual available stock:
+    // available stock = quantity - reservedQuantity
+    let availableStockProductIds = null;
+
+    if (inStock !== undefined) {
+      const inventoryRows = await prisma.$queryRaw(
+        Prisma.sql`
+          SELECT "productId"
+          FROM "Inventory"
+          WHERE "quantity"
+          ${
+            inStock === "true"
+              ? Prisma.sql`>`
+              : Prisma.sql`<=`
+          }
+          "reservedQuantity"
+        `
+      );
+
+      availableStockProductIds = inventoryRows.map(
+        (item) => item.productId
+      );
+    }
+
+    const where = {
+      isAvailable: true,
+
+      shop: {
+        isActive: true,
+        isOpen: true,
+        verificationStatus: "APPROVED",
+
+        ...(shopId !== undefined && {
+          id: shopId,
+        }),
+      },
+
+      category: {
+        isActive: true,
+
+        ...(categoryId !== undefined && {
+          id: categoryId,
+        }),
+      },
+
+      ...(minPrice !== undefined || maxPrice !== undefined
+        ? {
+            price: {
+              ...(minPrice !== undefined && {
+                gte: Number(minPrice),
+              }),
+              ...(maxPrice !== undefined && {
+                lte: Number(maxPrice),
+              }),
+            },
+          }
+        : {}),
+
+      ...(inStock !== undefined
+        ? {
+            id: {
+              in: availableStockProductIds,
+            },
+          }
+        : {}),
+    };
+
+    const [products, total] = await prisma.$transaction([
+      prisma.product.findMany({
+        where,
+        include: {
+          shop: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+              isOpen: true,
+            },
+          },
+          category: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+            },
+          },
+          inventory: {
+            select: {
+              quantity: true,
+              reservedQuantity: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        skip,
+        take: limit,
+      }),
+
+      prisma.product.count({
+        where,
+      }),
+    ]);
+
+    const totalPages = Math.ceil(total / limit);
+
+    return res.status(200).json({
+      success: true,
+      filters: {
+        categoryId: categoryId || null,
+        shopId: shopId || null,
+        minPrice: minPrice !== undefined ? Number(minPrice) : null,
+        maxPrice: maxPrice !== undefined ? Number(maxPrice) : null,
+        inStock: inStock !== undefined ? inStock === "true" : null,
+      },
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPreviousPage: page > 1,
+      },
+      products,
+    });
+  } catch (error) {
+    console.error("Filter products error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+    });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const getProductsByShop = async (req, res) => {
+  try {
+    const { shopId } = req.params;
+
+    const shop = await prisma.shop.findFirst({
+      where: {
+        id: shopId,
+        isActive: true,
+        isOpen: true,
+        verificationStatus: "APPROVED",
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (!shop) {
+      return res.status(404).json({
+        success: false,
+        message: "Shop not found",
+      });
+    }
+
+    const products = await prisma.product.findMany({
+      where: {
+        shopId,
+        isAvailable: true,
+        category: {
+          isActive: true,
+        },
+      },
+
+      include: {
+        shop: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+            isOpen: true,
+          },
+        },
+
+        category: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+          },
+        },
+
+        inventory: {
+          select: {
+            quantity: true,
+            reservedQuantity: true,
+            lowStockThreshold: true,
+          },
+        },
+      },
+
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      shopId,
+      products,
+    });
+  } catch (error) {
+    console.error("Get products by shop error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch shop products",
+    });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
 module.exports = {
   createProduct,
   getProducts,
+  getFeaturedProducts,
+  deleteProduct,
+  filterProducts,
   getProductById,
    updateProduct,
    updateInventory,
    getMyProducts,
+   searchProducts,
+    getProductsByShop,
 };

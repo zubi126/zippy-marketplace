@@ -1,0 +1,513 @@
+.admin-orders-page {
+  padding: 28px;
+  min-height: calc(100vh - 70px);
+  background: #f7f8fa;
+}
+
+/* HEADER */
+
+.orders-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.orders-header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #171717;
+}
+
+.orders-header p {
+  margin: 7px 0 0;
+  color: #737373;
+  font-size: 14px;
+}
+
+.orders-header-count {
+  min-width: 110px;
+  padding: 12px 18px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #ffffff;
+  text-align: center;
+}
+
+.orders-header-count span {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+  color: #171717;
+}
+
+.orders-header-count small {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  color: #737373;
+}
+
+/* TOOLBAR */
+
+.orders-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.orders-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.orders-filter label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #525252;
+}
+
+.orders-filter select {
+  min-width: 190px;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid #d4d4d4;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #262626;
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+}
+
+.orders-filter select:focus {
+  border-color: #171717;
+}
+
+.orders-refresh-button {
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid #d4d4d4;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #262626;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.orders-refresh-button:hover:not(:disabled) {
+  background: #f5f5f5;
+}
+
+.orders-refresh-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* TABLE */
+
+.orders-table-card {
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.orders-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.orders-table {
+  width: 100%;
+  min-width: 1250px;
+  border-collapse: collapse;
+}
+
+.orders-table thead {
+  background: #fafafa;
+}
+
+.orders-table th {
+  padding: 14px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  color: #737373;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.orders-table td {
+  padding: 16px;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
+  color: #262626;
+  font-size: 13px;
+}
+
+.orders-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.orders-table tbody tr:hover {
+  background: #fafafa;
+}
+
+/* ORDER */
+
+.order-number {
+  color: #171717;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.order-method {
+  margin-top: 5px;
+  color: #a3a3a3;
+  font-size: 11px;
+}
+
+/* CUSTOMER */
+
+.customer-info,
+.shop-info,
+.rider-info,
+.items-info,
+.amount-info,
+.payment-info,
+.date-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.customer-info strong,
+.shop-info strong,
+.rider-info strong,
+.items-info strong,
+.amount-info strong,
+.date-info strong {
+  color: #262626;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.customer-info span,
+.shop-info span,
+.rider-info span,
+.items-info span,
+.amount-info span,
+.date-info span {
+  color: #8a8a8a;
+  font-size: 11px;
+}
+
+.amount-info strong {
+  color: #171717;
+  font-size: 14px;
+}
+
+/* PAYMENT */
+
+.payment-info > strong {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.payment-status {
+  display: inline-flex;
+  width: fit-content;
+  padding: 3px 7px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.payment-status.paid {
+  background: #ecfdf3;
+  color: #15803d;
+}
+
+.payment-status.pending {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.payment-status.failed {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.payment-status.refunded {
+  background: #f5f3ff;
+  color: #7c3aed;
+}
+
+.payment-status.partial {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+/* ORDER STATUS */
+
+.order-status {
+  display: inline-flex;
+  width: fit-content;
+  padding: 6px 9px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.order-status.pending {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.order-status.confirmed {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.order-status.preparing {
+  background: #fefce8;
+  color: #a16207;
+}
+
+.order-status.ready {
+  background: #f0fdf4;
+  color: #15803d;
+}
+
+.order-status.out-for-delivery {
+  background: #eef2ff;
+  color: #4f46e5;
+}
+
+.order-status.delivered {
+  background: #ecfdf3;
+  color: #15803d;
+}
+
+.order-status.cancelled {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+/* RIDER */
+
+.no-rider {
+  color: #a3a3a3;
+  font-size: 11px;
+}
+
+/* STATE */
+
+.orders-state-card {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #ffffff;
+  text-align: center;
+}
+
+.orders-state-card h3 {
+  margin: 12px 0 6px;
+  color: #262626;
+  font-size: 16px;
+}
+
+.orders-state-card p {
+  margin: 0;
+  max-width: 420px;
+  color: #737373;
+  font-size: 13px;
+}
+
+.orders-state-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #f5f5f5;
+  color: #525252;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.orders-error-card .orders-state-icon {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.orders-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid #e5e5e5;
+  border-top-color: #171717;
+  border-radius: 50%;
+  animation: orders-spin 0.8s linear infinite;
+}
+
+@keyframes orders-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.orders-retry-button {
+  margin-top: 18px;
+  height: 38px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 7px;
+  background: #171717;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.orders-retry-button:hover {
+  background: #303030;
+}
+
+/* PAGINATION */
+
+.orders-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 16px;
+  padding: 14px 2px;
+}
+
+.pagination-info {
+  color: #737373;
+  font-size: 13px;
+}
+
+.pagination-info strong {
+  color: #262626;
+}
+
+.pagination-info span {
+  margin-left: 5px;
+}
+
+.pagination-buttons {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.pagination-buttons button {
+  height: 36px;
+  padding: 0 13px;
+  border: 1px solid #d4d4d4;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #404040;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pagination-buttons button:hover:not(:disabled) {
+  background: #f5f5f5;
+  border-color: #bdbdbd;
+}
+
+.pagination-buttons button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.pagination-current {
+  min-width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+  background: #171717;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+  .admin-orders-page {
+    padding: 20px;
+  }
+
+  .orders-header {
+    align-items: flex-start;
+  }
+
+  .orders-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .orders-pagination {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-orders-page {
+    padding: 14px;
+  }
+
+  .orders-header h1 {
+    font-size: 23px;
+  }
+
+  .orders-header-count {
+    min-width: 90px;
+    padding: 10px 12px;
+  }
+
+  .orders-filter {
+    width: 100%;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .orders-filter select {
+    width: 100%;
+  }
+
+  .orders-refresh-button {
+    width: 100%;
+  }
+
+  .pagination-buttons {
+    width: 100%;
+  }
+
+  .pagination-buttons button {
+    flex: 1;
+  }
+}

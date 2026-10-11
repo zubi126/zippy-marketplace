@@ -69,16 +69,21 @@ const addToCart = async (req, res) => {
       });
     }
 
+
+
+
+
     // Find or create ACTIVE cart for this customer + shop
-    let cart = await prisma.cart.findUnique({
-      where: {
-        customerId_shopId_status: {
-          customerId,
-          shopId: product.shopId,
-          status: "ACTIVE",
-        },
-      },
-    });
+
+const shopId = product.shopId;
+
+    let cart = await prisma.cart.findFirst({
+  where: {
+    customerId,
+    shopId,
+    status: "ACTIVE",
+  },
+});
 
     if (!cart) {
       cart = await prisma.cart.create({
@@ -158,11 +163,114 @@ const addToCart = async (req, res) => {
 
 
 
+
+
+
+
+
+// const getMyCart = async (req, res) => {
+//   try {
+//     const customerId = req.user.userId;
+
+//     const cart = await prisma.cart.findFirst({
+//       where: {
+//         customerId,
+//         status: "ACTIVE",
+//       },
+//       include: {
+//         shop: {
+//           select: {
+//             id: true,
+//             name: true,
+//             slug: true,
+//             phone: true,
+//             address: true,
+//             isOpen: true,
+//           },
+//         },
+//         items: {
+//           include: {
+//             product: {
+//               select: {
+//                 id: true,
+//                 name: true,
+//                 slug: true,
+//                 price: true,
+//                 imageUrl: true,
+//                 isAvailable: true,
+//               },
+//             },
+//           },
+//           orderBy: {
+//             createdAt: "asc",
+//           },
+//         },
+//       },
+//     });
+
+//     if (!cart) {
+//       return res.status(200).json({
+//         success: true,
+//         message: "Cart is empty",
+//         cart: null,
+//       });
+//     }
+
+//     const items = cart.items.map((item) => ({
+//       id: item.id,
+//       productId: item.productId,
+//       productName: item.product.name,
+//       price: item.product.price,
+//       quantity: item.quantity,
+//       lineTotal: Number(item.product.price) * item.quantity,
+//       imageUrl: item.product.imageUrl,
+//       isAvailable: item.product.isAvailable,
+//     }));
+
+//     const subtotal = items.reduce(
+//       (total, item) => total + item.lineTotal,
+//       0
+//     );
+
+//     return res.status(200).json({
+//       success: true,
+//       cart: {
+//         id: cart.id,
+//         status: cart.status,
+//         shop: cart.shop,
+//         items,
+//         subtotal,
+//       },
+//     });
+//   } catch (error) {
+//     console.error("Get cart error:", error);
+
+//     return res.status(500).json({
+//       success: false,
+//       message: "Something went wrong",
+//     });
+//   }
+// };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const getMyCart = async (req, res) => {
   try {
     const customerId = req.user.userId;
 
-    const cart = await prisma.cart.findFirst({
+    // Fetch every ACTIVE cart belonging to this customer.
+    const carts = await prisma.cart.findMany({
       where: {
         customerId,
         status: "ACTIVE",
@@ -188,6 +296,11 @@ const getMyCart = async (req, res) => {
                 price: true,
                 imageUrl: true,
                 isAvailable: true,
+                category: {
+                  select: {
+                    name: true,
+                  },
+                },
               },
             },
           },
@@ -196,26 +309,31 @@ const getMyCart = async (req, res) => {
           },
         },
       },
+      orderBy: {
+        createdAt: "asc",
+      },
     });
 
-    if (!cart) {
-      return res.status(200).json({
-        success: true,
-        message: "Cart is empty",
-        cart: null,
-      });
-    }
+    // Combine items from all shops into one cart response.
+    const items = carts.flatMap((cart) =>
+      cart.items.map((item) => {
+        const price = Number(item.product.price);
 
-    const items = cart.items.map((item) => ({
-      id: item.id,
-      productId: item.productId,
-      productName: item.product.name,
-      price: item.product.price,
-      quantity: item.quantity,
-      lineTotal: Number(item.product.price) * item.quantity,
-      imageUrl: item.product.imageUrl,
-      isAvailable: item.product.isAvailable,
-    }));
+        return {
+          id: item.id,
+          cartId: cart.id,
+          productId: item.productId,
+          quantity: item.quantity,
+          price,
+          lineTotal: price * item.quantity,
+          shop: cart.shop,
+          product: {
+            ...item.product,
+            price,
+          },
+        };
+      })
+    );
 
     const subtotal = items.reduce(
       (total, item) => total + item.lineTotal,
@@ -224,10 +342,10 @@ const getMyCart = async (req, res) => {
 
     return res.status(200).json({
       success: true,
+      message: items.length ? "Cart fetched successfully" : "Cart is empty",
       cart: {
-        id: cart.id,
-        status: cart.status,
-        shop: cart.shop,
+        id: carts[0]?.id || null,
+        status: "ACTIVE",
         items,
         subtotal,
       },
@@ -241,6 +359,36 @@ const getMyCart = async (req, res) => {
     });
   }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

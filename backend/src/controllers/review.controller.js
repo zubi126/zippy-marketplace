@@ -103,14 +103,21 @@ const createReview = async (req, res) => {
       message: "Review created successfully",
       review,
     });
-  } catch (error) {
-    console.error("Create review error:", error);
+} catch (error) {
+  console.error("Create review error:", error);
 
-    return res.status(500).json({
+  if (error.code === "P2002") {
+    return res.status(409).json({
       success: false,
-      message: "Something went wrong",
+      message: "You have already reviewed this product for this order",
     });
   }
+
+  return res.status(500).json({
+    success: false,
+    message: "Something went wrong",
+  });
+}
 };
 
 

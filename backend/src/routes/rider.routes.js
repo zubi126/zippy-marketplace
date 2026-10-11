@@ -12,6 +12,10 @@ const {
    deliverDelivery,
    getMyDeliveries,
    getMyEarnings,
+   getMyEarningsBalance,
+   getMyEarningsPayouts,
+   getMyWeeklyEarnings,
+   getMyMonthlyEarnings,
 } = require("../controllers/rider.controller");
 
 const {
@@ -147,6 +151,55 @@ router.get(
 );
 
 
+
+
+
+router.get(
+  "/earnings/balance",
+  authenticate,
+  authorize("RIDER"),
+  getMyEarningsBalance
+);
+
+
+
+
+
+
+
+router.get(
+  "/earnings/payouts",
+  authenticate,
+  authorize("RIDER"),
+  getMyEarningsPayouts
+);
+
+
+
+
+
+
+
+router.get(
+  "/earnings/weekly",
+  authenticate,
+  authorize("RIDER"),
+  getMyWeeklyEarnings
+);
+
+
+
+
+
+
+
+
+router.get(
+  "/earnings/monthly",
+  authenticate,
+  authorize("RIDER"),
+  getMyMonthlyEarnings
+);
 
 
 

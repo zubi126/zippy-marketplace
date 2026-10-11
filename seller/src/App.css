@@ -1,0 +1,112 @@
+.app-layout {
+  min-height: 100vh;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.seller-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 64px;
+
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 24px;
+
+  z-index: 100;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.seller-sidebar {
+  position: fixed;
+
+  top: 64px;
+  left: 0;
+  bottom: 0;
+
+  width: 240px;
+
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
+
+  padding: 24px 16px;
+
+  z-index: 90;
+}
+
+/* =========================
+   MAIN CONTENT
+========================= */
+
+.seller-main {
+  margin-left: 240px;
+  padding-top: 64px;
+
+  min-height: 100vh;
+}
+
+.seller-content {
+  padding: 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+  .seller-sidebar {
+    width: 200px;
+  }
+
+  .seller-main {
+    margin-left: 200px;
+  }
+
+  .seller-content {
+    padding: 24px 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .seller-sidebar {
+    display: none;
+  }
+
+  .seller-main {
+    margin-left: 0;
+  }
+
+  .seller-header {
+    padding: 0 16px;
+  }
+
+  .seller-content {
+    padding: 20px 16px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+

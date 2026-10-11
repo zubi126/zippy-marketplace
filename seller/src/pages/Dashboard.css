@@ -1,0 +1,459 @@
+/* =========================
+   DASHBOARD PAGE
+========================= */
+
+.dashboard-page {
+  padding-top: 32px;
+}
+
+/* =========================
+   WELCOME
+========================= */
+
+.dashboard-welcome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 28px;
+}
+
+.dashboard-eyebrow {
+  margin-bottom: 7px;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  color: #16a34a;
+
+  letter-spacing: 1px;
+}
+
+.dashboard-welcome h1 {
+  margin: 0;
+
+  font-size: 27px;
+  line-height: 1.25;
+
+  color: #111827;
+  font-weight: 700;
+}
+
+.dashboard-welcome > div:first-child > p:last-child {
+  margin-top: 7px;
+
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* =========================
+   SHOP STATUS
+========================= */
+
+.shop-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 8px 13px;
+
+  border: 1px solid #bbf7d0;
+  border-radius: 20px;
+
+  background: #f0fdf4;
+
+  color: #15803d;
+
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #22c55e;
+}
+
+/* =========================
+   STATS
+========================= */
+
+.dashboard-stats {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 16px;
+
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  padding: 20px;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.stat-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stat-label {
+  font-size: 10px;
+  font-weight: 700;
+
+  color: #9ca3af;
+
+  letter-spacing: 0.6px;
+}
+
+.stat-icon {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: #f0fdf4;
+  color: #16a34a;
+
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.stat-card h2 {
+  margin-top: 17px;
+
+  font-size: 25px;
+  font-weight: 700;
+
+  color: #111827;
+}
+
+.stat-card p {
+  margin-top: 5px;
+
+  font-size: 11px;
+
+  color: #9ca3af;
+}
+
+/* =========================
+   LOWER GRID
+========================= */
+
+.dashboard-grid {
+  display: grid;
+
+  grid-template-columns: 1.5fr 1fr;
+
+  gap: 20px;
+}
+
+.dashboard-card {
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+
+  overflow: hidden;
+}
+
+/* =========================
+   CARD HEADER
+========================= */
+
+.dashboard-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 20px;
+
+  border-bottom: 1px solid #f1f2f4;
+}
+
+.dashboard-card-header h2 {
+  margin: 0;
+
+  font-size: 15px;
+  font-weight: 650;
+
+  color: #111827;
+}
+
+.dashboard-card-header p {
+  margin-top: 4px;
+
+  font-size: 11px;
+
+  color: #9ca3af;
+}
+
+.dashboard-card-header button {
+  border: none;
+  background: transparent;
+
+  color: #16a34a;
+
+  font-size: 11px;
+  font-weight: 650;
+}
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.empty-state {
+  min-height: 230px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 30px;
+}
+
+.empty-state-icon {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #f3f4f6;
+
+  color: #9ca3af;
+
+  font-size: 20px;
+}
+
+.empty-state h3 {
+  margin-top: 13px;
+
+  font-size: 13px;
+  font-weight: 650;
+
+  color: #374151;
+}
+
+.empty-state p {
+  margin-top: 5px;
+
+  font-size: 11px;
+
+  color: #9ca3af;
+}
+
+/* =========================
+   QUICK ACTIONS
+========================= */
+
+.quick-action-list {
+  padding: 7px 10px;
+}
+
+.quick-action-list button {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 13px 10px;
+
+  border: none;
+  border-bottom: 1px solid #f3f4f6;
+
+  background: transparent;
+
+  text-align: left;
+
+  transition: background 0.2s ease;
+}
+
+.quick-action-list button:last-child {
+  border-bottom: none;
+}
+
+.quick-action-list button:hover {
+  background: #f9fafb;
+}
+
+.quick-action-icon {
+  width: 34px;
+  height: 34px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: #f0fdf4;
+
+  color: #16a34a;
+
+  font-size: 16px;
+}
+
+.quick-action-list button > span:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+
+  flex: 1;
+}
+
+.quick-action-list strong {
+  font-size: 12px;
+  font-weight: 650;
+
+  color: #374151;
+}
+
+.quick-action-list small {
+  margin-top: 3px;
+
+  font-size: 10px;
+
+  color: #9ca3af;
+}
+
+.quick-action-arrow {
+  color: #9ca3af;
+  font-size: 15px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1100px) {
+  .dashboard-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard-page {
+    padding-top: 20px;
+  }
+
+  .dashboard-welcome {
+    align-items: flex-start;
+    flex-direction: column;
+
+    gap: 15px;
+  }
+
+  .dashboard-welcome h1 {
+    font-size: 22px;
+  }
+
+  .dashboard-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Recent Orders List */
+
+.dashboard-orders-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-order-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 22px;
+  border-top: 1px solid #eef0f3;
+}
+
+.dashboard-order-item:first-child {
+  border-top: none;
+}
+
+.dashboard-order-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.dashboard-order-number {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.dashboard-order-status {
+  width: fit-content;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: #f0fdf4;
+  color: #15803d;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.dashboard-order-earning {
+  flex-shrink: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+}

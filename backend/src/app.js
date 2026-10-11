@@ -13,8 +13,10 @@ const addressRoutes = require("./routes/address.routes");
 const orderRoutes = require("./routes/order.routes");
 const riderRoutes = require("./routes/rider.routes");
 const reviewRoutes = require("./routes/review.routes");
+const notificationRoutes = require("./routes/notification.routes");
+const customerRoutes = require("./routes/customer.routes");
 
-
+const path = require("path");
 
 const app = express();
 
@@ -31,10 +33,16 @@ const globalLimiter = rateLimit({
   },
 });
 
+app.use(cors());
+
 app.use(globalLimiter);
 
-app.use(cors());
+app.use(
+  express.static(path.join(__dirname, "../push-test"))
+);
+
 app.use(express.json());
+
 app.use("/api/auth", authRoutes);
 app.use("/api/shops", shopRoutes);
 app.use("/api/admin", adminRoutes);
@@ -46,6 +54,8 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/riders", riderRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/shop", shopRoutes);
+app.use("/api/notifications", notificationRoutes);
+app.use("/api/customer", customerRoutes);
 
 app.get("/", (req, res) => {
   res.json({

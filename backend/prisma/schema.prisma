@@ -16,6 +16,15 @@ enum UserRole {
 
 
 
+enum OtpPurpose {
+  CUSTOMER_REGISTRATION
+  SHOPKEEPER_REGISTRATION
+  RIDER_REGISTRATION
+  PASSWORD_RESET
+}
+
+
+
 model User {
   id           String   @id @default(uuid())
   name         String?
@@ -30,7 +39,15 @@ model User {
   addresses Address[]
   carts Cart[]
   orders Order[]
+
+
+
   reviews Review[]
+
+  checkoutPayments CheckoutPayment[]
+
+  pushSubscriptions PushSubscription[]
+  refundRequests RefundRequest[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -65,11 +82,18 @@ rejectionReason String?
   orders Order[]
   transfers Transfer[]
 
+  ledgerEntries LedgerEntry[]
+payouts       SellerPayout[]
+
   owner User @relation(fields: [ownerId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+
+
+
 
 
 
@@ -93,6 +117,11 @@ model Address {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+
+
+
+
 
 
 model Category {
@@ -127,6 +156,7 @@ model Product {
   imageUrl    String?
 
   isAvailable Boolean @default(true)
+  isFeatured Boolean @default(false)
 
   shop        Shop     @relation(fields: [shopId], references: [id])
   category    Category @relation(fields: [categoryId], references: [id])
@@ -232,9 +262,10 @@ enum PaymentStatus {
   PENDING
   PAID
   FAILED
+  CANCELLED
+  PARTIALLY_REFUNDED
   REFUNDED
 }
-
 
 enum RiderStatus {
   OFFLINE
@@ -270,6 +301,78 @@ enum DeliveryStatus {
 }
 
 
+enum LedgerEntryType {
+  SALE
+  COMMISSION
+  REFUND
+  ADJUSTMENT
+  PAYOUT
+}
+
+
+enum LedgerEntryDirection {
+  CREDIT
+  DEBIT
+}
+
+
+enum SellerPayoutStatus {
+  PENDING
+  PROCESSING
+  PAID
+  FAILED
+  CANCELLED
+}
+
+
+
+
+
+
+
+
+
+enum RiderPayoutStatus {
+  PENDING
+  PROCESSING
+  PAID
+  FAILED
+  CANCELLED
+}
+
+enum RiderLedgerEntryType {
+  EARNING
+  PAYOUT
+  ADJUSTMENT
+}
+
+enum RiderLedgerEntryDirection {
+  CREDIT
+  DEBIT
+}
+
+
+
+
+
+
+
+
+
+enum CancellationReason {
+  CHANGED_MIND
+  ORDERED_BY_MISTAKE
+  BETTER_PRICE
+  DELIVERY_TAKING_TOO_LONG
+  PRODUCT_NOT_NEEDED
+  WRONG_PRODUCT_OR_QUANTITY
+  OTHER
+}
+
+
+
+
+
 model Order {
   id          String @id @default(uuid())
   orderNumber String @unique
@@ -282,9 +385,24 @@ model Order {
   platformFee Decimal
   total       Decimal
 
+
+
+    commissionRate       Decimal @default(10)
+  commissionAmount     Decimal @default(0)
+  sellerPayableAmount  Decimal @default(0)
+
+
+
   paymentMethod PaymentMethod @default(COD)
   paymentStatus PaymentStatus @default(PENDING)
   status        OrderStatus   @default(PENDING)
+
+
+
+  cancelledAt       DateTime?
+cancellationReason CancellationReason?
+cancellationNote  String?
+cancelledBy       String?
 
   // Delivery address snapshot
   deliveryName        String
@@ -295,8 +413,13 @@ model Order {
   deliveryPincode     String
   deliveryLatitude    Decimal?
   deliveryLongitude   Decimal?
+
   payment Payment?
   
+
+checkoutPaymentId String?
+checkoutPayment   CheckoutPayment? @relation(fields: [checkoutPaymentId], references: [id])
+
 
   customer User @relation(fields: [customerId], references: [id])
   shop     Shop @relation(fields: [shopId], references: [id])
@@ -305,6 +428,9 @@ model Order {
   transfers Transfer[]
   deliveries Delivery[]
   reviews Review[]
+  refundRequests RefundRequest[]
+
+  ledgerEntries LedgerEntry[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -336,27 +462,78 @@ model OrderItem {
 
 
 
-
 model Payment {
-  id      String @id @default(uuid())
-  orderId String @unique
+  id        String  @id @default(uuid())
+  orderId   String  @unique
 
-  provider String
-  amount   Decimal
-  currency String @default("INR")
+  provider  String?
+  method    PaymentMethod
+  amount    Decimal
+  refundedAmount Decimal @default(0)
+  currency  String @default("INR")
 
-  razorpayOrderId   String? @unique
-  razorpayPaymentId String? @unique
+  providerOrderId   String? @unique
+  providerPaymentId String? @unique
+  
 
   status PaymentStatus @default(PENDING)
 
-  paidAt DateTime?
+  paidAt      DateTime?
+  failedAt    DateTime?
+  refundedAt  DateTime?
+
+  metadata Json?
 
   order Order @relation(fields: [orderId], references: [id])
 
+  ledgerEntries LedgerEntry[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([method])
+  @@index([createdAt])
 }
+
+
+
+
+
+
+
+
+
+model CheckoutPayment {
+  id                String        @id @default(uuid())
+  checkoutNumber    String        @unique
+  amount            Decimal
+  currency          String        @default("INR")
+  method            PaymentMethod
+  provider          String?
+  providerOrderId   String?       @unique
+  providerPaymentId String?       @unique
+  status            PaymentStatus @default(PENDING)
+  paidAt            DateTime?
+  failedAt          DateTime?
+  refundedAmount    Decimal       @default(0)
+  refundedAt        DateTime?
+  metadata          Json?
+
+  customerId        String
+  customer          User          @relation(fields: [customerId], references: [id])
+
+  orders            Order[]
+
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  @@index([customerId])
+  @@index([status])
+  @@index([method])
+  @@index([createdAt])
+}
+
 
 
 
@@ -378,6 +555,9 @@ model Rider {
 
   user User @relation(fields: [userId], references: [id])
   deliveries Delivery[]
+
+  payouts RiderPayout[]
+  ledgerEntries RiderLedgerEntry[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -404,6 +584,8 @@ model Delivery {
 
   order Order @relation(fields: [orderId], references: [id])
   rider Rider @relation(fields: [riderId], references: [id])
+
+  ledgerEntries RiderLedgerEntry[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -542,11 +724,12 @@ model WebhookEvent {
 
 
 
-
 model OtpVerification {
   id String @id @default(uuid())
 
   phone String
+
+  purpose OtpPurpose
 
   sessionId String
 
@@ -555,12 +738,19 @@ model OtpVerification {
   attempts Int @default(0)
 
   verified Boolean @default(false)
+  
+
+
+  consumedAt    DateTime?
+  invalidatedAt DateTime?
 
   lastSentAt DateTime @default(now())
+
 
   createdAt DateTime @default(now())
 
   @@index([phone])
+  @@index([purpose])
   @@index([expiresAt])
 }
 
@@ -593,4 +783,248 @@ model Review {
   @@index([productId])
   @@index([customerId])
   @@index([orderId])
+}
+
+
+
+
+
+
+
+model PushSubscription {
+  id        String   @id @default(uuid())
+
+  userId    String
+
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+
+
+
+
+
+
+model LedgerEntry {
+  id String @id @default(uuid())
+
+  shopId String
+
+  orderId   String?
+  paymentId String?
+  payoutId  String?
+
+  type LedgerEntryType
+
+  amount Decimal
+
+  description String?
+
+  referenceId String?
+
+  direction LedgerEntryDirection
+  
+  idempotencyKey String @unique
+
+  order   Order?   @relation(fields: [orderId], references: [id])
+  payment Payment? @relation(fields: [paymentId], references: [id])
+  payout  SellerPayout? @relation(fields: [payoutId], references: [id])
+  shop    Shop     @relation(fields: [shopId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@index([shopId])
+  @@index([orderId])
+  @@index([paymentId])
+  @@index([payoutId])
+  @@index([type])
+  @@index([createdAt])
+}
+
+
+
+
+
+
+
+
+
+
+
+model SellerPayout {
+  id String @id @default(uuid())
+
+  shopId String
+
+  amount Decimal
+  currency String @default("INR")
+
+  periodStart DateTime
+  periodEnd   DateTime
+
+  status SellerPayoutStatus @default(PENDING)
+
+  provider String?
+  providerPayoutId String?
+
+  paidAt DateTime?
+  failedAt DateTime?
+  failureReason String?
+
+  referenceId String?
+  idempotencyKey String @unique
+
+  shop Shop @relation(fields: [shopId], references: [id])
+
+  ledgerEntries LedgerEntry[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([shopId])
+  @@index([status])
+  @@index([periodStart, periodEnd])
+  @@index([createdAt])
+}
+
+
+
+
+
+
+
+
+
+
+enum RefundRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model RefundRequest {
+  id String @id @default(uuid())
+
+  orderId String
+  customerId String
+
+  reason String
+  note String?
+
+  amount Decimal
+  status RefundRequestStatus @default(PENDING)
+
+  reviewedBy String?
+  reviewedAt DateTime?
+  rejectionReason String?
+
+  providerRefundId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id])
+  customer User @relation(fields: [customerId], references: [id])
+
+  @@index([orderId])
+  @@index([customerId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+
+
+
+
+
+
+
+model RiderPayout {
+  id String @id @default(uuid())
+
+  riderId String
+
+  amount Decimal
+  currency String @default("INR")
+
+  periodStart DateTime
+  periodEnd DateTime
+
+  status RiderPayoutStatus @default(PENDING)
+
+  provider String?
+  providerPayoutId String?
+
+  paidAt DateTime?
+  failedAt DateTime?
+  failureReason String?
+
+  referenceId String?
+  idempotencyKey String @unique
+
+  rider Rider @relation(fields: [riderId], references: [id])
+
+  ledgerEntries RiderLedgerEntry[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([riderId])
+  @@index([status])
+  @@index([periodStart, periodEnd])
+  @@index([createdAt])
+}
+
+
+
+
+
+
+
+
+
+
+
+model RiderLedgerEntry {
+  id String @id @default(uuid())
+
+  riderId String
+
+  deliveryId String?
+  payoutId String?
+
+  type RiderLedgerEntryType
+
+  amount Decimal
+
+  description String?
+  referenceId String?
+
+  direction RiderLedgerEntryDirection
+
+  idempotencyKey String @unique
+
+  rider Rider @relation(fields: [riderId], references: [id])
+  delivery Delivery? @relation(fields: [deliveryId], references: [id])
+  payout RiderPayout? @relation(fields: [payoutId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@index([riderId])
+  @@index([deliveryId])
+  @@index([payoutId])
+  @@index([type])
+  @@index([createdAt])
 }

@@ -1,0 +1,206 @@
+
+.create-rider-payout-page {
+  padding-bottom: 32px;
+}
+
+.create-rider-payout-back-btn {
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  color: #111827;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.create-rider-payout-back-btn:hover {
+  background: #f9fafb;
+}
+
+.create-rider-payout-card {
+  width: 100%;
+  max-width: 760px;
+  margin-top: 24px;
+  padding: 28px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(17, 24, 39, 0.04);
+}
+
+.create-rider-payout-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.create-rider-payout-field label {
+  color: #111827;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.create-rider-payout-field input,
+.create-rider-payout-field select {
+  width: 100%;
+  min-height: 44px;
+  padding: 11px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #111827;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.create-rider-payout-field input:focus,
+.create-rider-payout-field select:focus {
+  border-color: #6b7280;
+  box-shadow: 0 0 0 3px rgba(107, 114, 128, 0.12);
+}
+
+.create-rider-payout-field small {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.create-rider-payout-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.create-rider-payout-balance {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 24px;
+  padding: 18px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+.create-rider-payout-balance span {
+  color: #4b5563;
+  font-size: 13px;
+}
+
+.create-rider-payout-balance strong {
+  color: #111827;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.create-rider-payout-alert {
+  margin-bottom: 20px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.create-rider-payout-alert.error {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.create-rider-payout-alert.success {
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.create-rider-payout-loading {
+  padding: 30px 0;
+  text-align: center;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.create-rider-payout-notice {
+  margin-top: 4px;
+  padding: 14px;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  background: #fffbeb;
+  color: #92400e;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.create-rider-payout-notice strong {
+  font-weight: 700;
+}
+
+.create-rider-payout-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.create-rider-payout-cancel-btn,
+.create-rider-payout-submit-btn {
+  min-height: 42px;
+  padding: 11px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.create-rider-payout-cancel-btn {
+  background: #ffffff;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.create-rider-payout-cancel-btn:hover {
+  background: #f9fafb;
+}
+
+.create-rider-payout-submit-btn {
+  background: #111827;
+  color: #ffffff;
+  border: 1px solid #111827;
+}
+
+.create-rider-payout-submit-btn:hover:not(:disabled) {
+  background: #1f2937;
+}
+
+.create-rider-payout-submit-btn:disabled,
+.create-rider-payout-cancel-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .create-rider-payout-card {
+    padding: 18px;
+  }
+
+  .create-rider-payout-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .create-rider-payout-actions {
+    flex-direction: column-reverse;
+  }
+
+  .create-rider-payout-cancel-btn,
+  .create-rider-payout-submit-btn {
+    width: 100%;
+  }
+
+  .create-rider-payout-back-btn {
+    width: 100%;
+  }
+}

@@ -1,0 +1,146 @@
+.products-section {
+  width: 100%;
+  padding: 45px 7%;
+  background: #ffffff;
+}
+
+.products-section .section-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.products-section .section-heading span {
+  color: #12b76a;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.products-section .section-heading h2 {
+  margin-top: 5px;
+  color: #101828;
+  font-size: 30px;
+}
+
+.products-section .section-heading button {
+  border: none;
+  background: transparent;
+  color: #079455;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 18px;
+}
+
+.product-card {
+  overflow: hidden;
+  border: 1px solid #eaecf0;
+  border-radius: 14px;
+  background: white;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(16, 24, 40, 0.08);
+}
+
+.product-image {
+  width: 100%;
+  height: 190px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.product-image span {
+  font-size: 55px;
+}
+
+.product-info {
+  padding: 15px;
+}
+
+.product-info h3 {
+  overflow: hidden;
+  margin: 0;
+  color: #101828;
+  font-size: 15px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.product-info small {
+  display: block;
+  margin-top: 6px;
+  color: #98a2b3;
+  font-size: 12px;
+}
+
+.product-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+}
+
+.product-bottom strong {
+  color: #101828;
+  font-size: 18px;
+}
+
+.product-bottom button {
+  padding: 7px 11px;
+  border: none;
+  border-radius: 6px;
+  background: #12b76a;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.products-loading,
+.products-empty,
+.products-error {
+  padding: 50px 20px;
+  text-align: center;
+  color: #667085;
+}
+
+@media (max-width: 1200px) {
+  .products-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .products-section {
+    padding: 35px 20px;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

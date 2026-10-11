@@ -33,10 +33,11 @@ if (!decoded.userId || !decoded.role) {
 
 
 
-    req.user = {
-      userId: decoded.userId,
-      role: decoded.role,
-    };
+   req.user = {
+  userId: decoded.userId,
+  role: decoded.role,
+  adminVerified: decoded.adminVerified === true,
+};
 
     next();
   } catch (error) {

@@ -1,0 +1,552 @@
+/* .rider-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  border-bottom: 1px solid #e5e7eb;
+  background: #ffffff;
+}
+
+.rider-header-container {
+  width: 100%;
+  max-width: 1280px;
+  min-height: 72px;
+  margin: 0 auto;
+  padding: 0 28px;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+}
+
+
+
+.rider-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.rider-header-logo {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background: #16a34a;
+  color: #ffffff;
+
+  font-size: 23px;
+  font-weight: 800;
+}
+
+.rider-header-brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.rider-header-brand-text strong {
+  color: #111827;
+  font-size: 19px;
+  line-height: 1.1;
+}
+
+.rider-header-brand-text strong span {
+  color: #16a34a;
+}
+
+.rider-header-brand-text small {
+  margin-top: 3px;
+  color: #6b7280;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Navigation *
+
+.rider-header-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rider-header-nav button {
+  padding: 9px 13px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+
+  color: #4b5563;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.rider-header-nav button:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+/* Account *
+
+.rider-header-account {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rider-header-profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 4px;
+
+  border: none;
+  background: transparent;
+
+  cursor: pointer;
+  text-align: left;
+}
+
+.rider-header-avatar {
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  background: #dcfce7;
+  color: #15803d;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.rider-header-user {
+  display: flex;
+  flex-direction: column;
+}
+
+.rider-header-user small {
+  color: #9ca3af;
+  font-size: 10px;
+}
+
+.rider-header-user strong {
+  max-width: 120px;
+  overflow: hidden;
+
+  color: #111827;
+  font-size: 12px;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.rider-header-logout {
+  padding: 9px 14px;
+
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+
+  background: #ffffff;
+  color: #dc2626;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.rider-header-logout:hover {
+  background: #fef2f2;
+}
+
+/* Tablet *
+
+@media (max-width: 900px) {
+  .rider-header-container {
+    padding: 0 18px;
+  }
+
+  .rider-header-nav {
+    gap: 2px;
+  }
+
+  .rider-header-nav button {
+    padding: 8px 9px;
+  }
+
+  .rider-header-user {
+    display: none;
+  }
+}
+
+/* Mobile *
+
+@media (max-width: 650px) {
+  .rider-header-container {
+    min-height: 64px;
+    padding: 0 12px;
+    gap: 8px;
+  }
+
+  .rider-header-logo {
+    width: 36px;
+    height: 36px;
+    font-size: 19px;
+  }
+
+  .rider-header-brand-text strong {
+    font-size: 16px;
+  }
+
+  .rider-header-brand-text small {
+    font-size: 9px;
+  }
+
+  .rider-header-nav {
+    display: none;
+  }
+
+  .rider-header-account {
+    margin-left: auto;
+  }
+
+  .rider-header-profile {
+    display: none;
+  }
+
+  .rider-header-logout {
+    padding: 8px 11px;
+    font-size: 11px;
+  }
+} */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.rider-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  border-bottom: 1px solid #e5e7eb;
+  background: #ffffff;
+}
+
+.rider-header-container {
+  width: 100%;
+  max-width: 1280px;
+  min-height: 72px;
+  margin: 0 auto;
+  padding: 0 28px;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+}
+
+/* Mobile Menu Toggle */
+
+.rider-header-menu-toggle {
+  display: none;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #111827;
+
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/* Brand */
+
+.rider-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.rider-header-logo {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+  background: #16a34a;
+  color: #ffffff;
+
+  font-size: 23px;
+  font-weight: 800;
+}
+
+.rider-header-brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.rider-header-brand-text strong {
+  color: #111827;
+  font-size: 19px;
+  line-height: 1.1;
+}
+
+.rider-header-brand-text strong span {
+  color: #16a34a;
+}
+
+.rider-header-brand-text small {
+  margin-top: 3px;
+  color: #6b7280;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Navigation */
+
+.rider-header-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rider-header-nav button {
+  padding: 9px 13px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+
+  color: #4b5563;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.rider-header-nav button:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+/* Account */
+
+.rider-header-account {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rider-header-profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px;
+
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.rider-header-avatar {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  background: #dcfce7;
+  color: #15803d;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.rider-header-user {
+  display: flex;
+  flex-direction: column;
+}
+
+.rider-header-user small {
+  color: #9ca3af;
+  font-size: 10px;
+}
+
+.rider-header-user strong {
+  max-width: 120px;
+  overflow: hidden;
+  color: #111827;
+  font-size: 12px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.rider-header-logout {
+  padding: 9px 14px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+
+  background: #ffffff;
+  color: #dc2626;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.rider-header-logout:hover {
+  background: #fef2f2;
+}
+
+/* Tablet */
+
+@media (max-width: 900px) {
+  .rider-header-container {
+    padding: 0 18px;
+  }
+
+  .rider-header-nav {
+    gap: 2px;
+  }
+
+  .rider-header-nav button {
+    padding: 8px 9px;
+  }
+
+  .rider-header-user {
+    display: none;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 650px) {
+  .rider-header-container {
+    min-height: 64px;
+    padding: 0 12px;
+    gap: 8px;
+  }
+
+  .rider-header-menu-toggle {
+    display: inline-flex;
+  }
+
+  .rider-header-brand {
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .rider-header-logo {
+    width: 36px;
+    height: 36px;
+    font-size: 19px;
+  }
+
+  .rider-header-brand-text strong {
+    font-size: 16px;
+  }
+
+  .rider-header-brand-text small {
+    font-size: 9px;
+  }
+
+  .rider-header-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+
+    padding: 12px;
+    box-sizing: border-box;
+
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  .rider-header-nav.mobile-menu-open {
+    display: flex;
+  }
+
+  .rider-header-nav button {
+    width: 100%;
+    padding: 13px 14px;
+    border-radius: 8px;
+    text-align: left;
+    font-size: 14px;
+  }
+
+  .rider-header-account {
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .rider-header-profile {
+    display: none;
+  }
+
+  .rider-header-logout {
+    padding: 8px 11px;
+    font-size: 11px;
+  }
+}

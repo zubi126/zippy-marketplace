@@ -2,6 +2,7 @@ const express = require("express");
 
 const {
   createCategory,
+  getCategories,
 } = require("../controllers/category.controller");
 
 const {
@@ -10,6 +11,13 @@ const {
 } = require("../middleware/auth.middleware");
 
 const router = express.Router();
+
+
+
+router.get("/", getCategories);
+
+
+
 
 router.post(
   "/",

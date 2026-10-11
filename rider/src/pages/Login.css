@@ -1,0 +1,186 @@
+.rider-login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px;
+  box-sizing: border-box;
+  background: #f8fafc;
+}
+
+.rider-login-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 36px;
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+.rider-login-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.rider-login-icon {
+  font-size: 44px;
+  margin-bottom: 12px;
+}
+
+.rider-login-header h1 {
+  margin: 0;
+  color: #111827;
+  font-size: 28px;
+}
+
+.rider-login-header p {
+  margin: 8px 0 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.rider-login-error {
+  margin-bottom: 18px;
+  padding: 11px 13px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 13px;
+}
+
+.rider-login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.rider-login-form label {
+  margin-bottom: 6px;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.rider-login-form input {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  outline: none;
+  background: #ffffff;
+  color: #111827;
+  font-size: 14px;
+}
+
+.rider-login-form input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.rider-login-form button {
+  margin-top: 8px;
+  padding: 13px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.rider-login-form button:hover {
+  background: #1d4ed8;
+}
+
+.rider-login-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.rider-login-register {
+  margin: 22px 0 0;
+  text-align: center;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.rider-login-register span {
+  color: #2563eb;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.rider-login-register span:hover {
+  text-decoration: underline;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media (max-width: 480px) {
+  .rider-login-page {
+    padding: 20px 12px;
+  }
+
+  .rider-login-card {
+    padding: 26px 20px;
+  }
+
+  .rider-login-header h1 {
+    font-size: 24px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.rider-forgot-password {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -8px;
+  margin-bottom: 16px;
+}
+
+.rider-login-form .rider-forgot-password button {
+  width: auto;
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: #16833b;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.rider-login-form .rider-forgot-password button:hover {
+  background: transparent;
+  text-decoration: underline;
+}

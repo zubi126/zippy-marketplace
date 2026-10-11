@@ -6,11 +6,18 @@ const { verifyOtpSchema } = require("../validators/auth.validator");
 
 const {
   register,
+   registerShopkeeper,
+   registerRider,
   login,
   me,
   sendOtp,
   verifyOtp,
   resendOtp,
+  logout,
+
+   forgotPassword,
+  verifyForgotPasswordOtp,
+  resetPassword,
 } = require("../controllers/auth.controller");
 
 const {
@@ -32,10 +39,19 @@ const otpLimiter = rateLimit({
 });
 
 router.post("/register", register);
+router.post("/register-shopkeeper", registerShopkeeper);
+
+router.post("/register-rider", registerRider);
 
 router.post("/login", login);
 
 router.get("/me", authenticate, me);
+
+router.post(
+  "/logout",
+  authenticate,
+  logout
+);
 
 router.post("/send-otp", otpLimiter, sendOtp);
 
@@ -47,6 +63,26 @@ router.post(
   validate(verifyOtpSchema),
   verifyOtp
 );
+
+
+
+
+
+router.post("/forgot-password", forgotPassword);
+
+router.post(
+  "/verify-forgot-password-otp",
+  verifyForgotPasswordOtp
+);
+
+router.post(
+  "/reset-password",
+  resetPassword
+);
+
+
+
+
 
 router.get(
   "/customer-test",

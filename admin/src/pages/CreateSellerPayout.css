@@ -1,0 +1,166 @@
+
+.create-seller-payout-page {
+  padding-bottom: 32px;
+}
+
+.csp-form {
+  width: 100%;
+  max-width: 760px;
+  margin-top: 24px;
+  padding: 28px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.csp-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.csp-field label {
+  color: #374151;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.csp-field input,
+.csp-field select,
+.csp-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 13px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #111827;
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+}
+
+.csp-field input:focus,
+.csp-field select:focus,
+.csp-field textarea:focus {
+  border-color: #374151;
+  box-shadow: 0 0 0 3px rgba(55, 65, 81, 0.1);
+}
+
+.csp-field input:disabled,
+.csp-field select:disabled,
+.csp-field textarea:disabled {
+  background: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.csp-field textarea {
+  resize: vertical;
+}
+
+.csp-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.csp-balance {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 22px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #f9fafb;
+  color: #4b5563;
+  font-size: 14px;
+}
+
+.csp-balance strong {
+  color: #111827;
+  font-size: 18px;
+}
+
+.csp-message {
+  margin-bottom: 20px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.csp-error {
+  color: #991b1b;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.csp-success {
+  color: #166534;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+}
+
+.csp-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.csp-submit-btn,
+.csp-secondary-btn {
+  padding: 11px 17px;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.csp-submit-btn {
+  color: #ffffff;
+  background: #111827;
+}
+
+.csp-submit-btn:hover {
+  background: #1f2937;
+}
+
+.csp-secondary-btn {
+  color: #374151;
+  background: #f3f4f6;
+}
+
+.csp-secondary-btn:hover {
+  background: #e5e7eb;
+}
+
+.csp-submit-btn:disabled,
+.csp-secondary-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .csp-form {
+    padding: 18px;
+  }
+
+  .csp-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .csp-actions {
+    flex-direction: column-reverse;
+  }
+
+  .csp-submit-btn,
+  .csp-secondary-btn {
+    width: 100%;
+  }
+}

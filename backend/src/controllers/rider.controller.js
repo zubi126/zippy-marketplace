@@ -500,12 +500,27 @@ const rejectDelivery = async (req, res) => {
   }
 
   // Reject current rider's delivery
-  const updatedDelivery = await tx.delivery.update({
-    where: { id: delivery.id },
-    data: {
-      status: "CANCELLED",
-    },
-  });
+ // Reject current rider's delivery atomically
+const rejected = await tx.delivery.updateMany({
+  where: {
+    id: delivery.id,
+    riderId: rider.id,
+    status: "ASSIGNED",
+  },
+  data: {
+    status: "CANCELLED",
+  },
+});
+
+if (rejected.count === 0) {
+  throw new Error("Only assigned deliveries can be rejected");
+}
+
+const updatedDelivery = await tx.delivery.findUnique({
+  where: { id: delivery.id },
+});
+
+
 
   // Find another available rider
   const nextRider = await findAvailableRider(
@@ -733,6 +748,26 @@ const deliverDelivery = async (req, res) => {
         },
       });
 
+
+
+
+
+// 7.1. Record rider earning in rider ledger
+const riderEarningLedger = await tx.riderLedgerEntry.create({
+  data: {
+    riderId: rider.id,
+    deliveryId: delivery.id,
+    type: "EARNING",
+    amount: delivery.riderEarning,
+    description: "Rider earning for completed delivery",
+    referenceId: delivery.id,
+    direction: "CREDIT",
+    idempotencyKey: `RIDER_EARNING:${delivery.id}`,
+  },
+});
+
+
+
       // 8. Mark order as delivered
      const updatedOrder = await tx.order.update({
   where: {
@@ -789,6 +824,7 @@ const updatedRider = await tx.rider.update({
 
       return {
         delivery: updatedDelivery,
+        riderEarningLedger,
         order: updatedOrder,
         payment: updatedPayment,
         rider: updatedRider,
@@ -893,8 +929,6 @@ const getMyDeliveries = async (req, res) => {
 
 
 
-
-
 const getMyEarnings = async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -910,39 +944,108 @@ const getMyEarnings = async (req, res) => {
       });
     }
 
+    const { startDate, endDate } = req.query;
+
+    // Custom date range
+    if (startDate || endDate) {
+      if (!startDate || !endDate) {
+        return res.status(400).json({
+          success: false,
+          message: "Both startDate and endDate are required",
+        });
+      }
+
+      const start = new Date(`${startDate}T00:00:00+05:30`);
+      const end = new Date(`${endDate}T23:59:59.999+05:30`);
+
+      if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid date format. Use YYYY-MM-DD",
+        });
+      }
+
+      if (start > end) {
+        return res.status(400).json({
+          success: false,
+          message: "startDate cannot be after endDate",
+        });
+      }
+
+      const earnings = await prisma.riderLedgerEntry.findMany({
+        where: {
+          riderId: rider.id,
+          type: "EARNING",
+          direction: "CREDIT",
+          createdAt: {
+            gte: start,
+            lte: end,
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        select: {
+          id: true,
+          deliveryId: true,
+          amount: true,
+          description: true,
+          referenceId: true,
+          createdAt: true,
+        },
+      });
+
+      let totalEarnings = 0;
+
+      for (const earning of earnings) {
+        totalEarnings += Number(earning.amount);
+      }
+
+      return res.status(200).json({
+        success: true,
+        period: {
+          start,
+          end,
+        },
+        summary: {
+          totalDeliveries: earnings.length,
+          totalEarnings,
+        },
+        earnings,
+      });
+    }
+
+    // Existing behaviour when no date range is supplied
     const deliveries = await prisma.delivery.findMany({
       where: {
         riderId: rider.id,
         status: "DELIVERED",
       },
+      orderBy: {
+        deliveredAt: "desc",
+      },
       select: {
         id: true,
+        orderId: true,
         deliveryFee: true,
         riderEarning: true,
         deliveredAt: true,
       },
-      orderBy: {
-        deliveredAt: "desc",
-      },
     });
 
-    const totalEarnings = deliveries.reduce(
-      (sum, delivery) => sum + Number(delivery.riderEarning),
-      0
-    );
+    let totalDeliveryFees = 0;
+    let totalEarnings = 0;
 
-    const totalDeliveryFees = deliveries.reduce(
-      (sum, delivery) => sum + Number(delivery.deliveryFee),
-      0
-    );
+    for (const delivery of deliveries) {
+      totalDeliveryFees += Number(delivery.deliveryFee);
+      totalEarnings += Number(delivery.riderEarning);
+    }
 
     return res.status(200).json({
       success: true,
-      summary: {
-        totalDeliveries: deliveries.length,
-        totalDeliveryFees,
-        totalEarnings,
-      },
+      totalDeliveries: deliveries.length,
+      totalDeliveryFees,
+      totalEarnings,
       deliveries,
     });
   } catch (error) {
@@ -954,6 +1057,349 @@ const getMyEarnings = async (req, res) => {
     });
   }
 };
+
+
+
+
+
+const getMyEarningsBalance = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    const rider = await prisma.rider.findUnique({
+      where: {
+        userId,
+      },
+    });
+
+    if (!rider) {
+      return res.status(404).json({
+        success: false,
+        message: "Rider profile not found",
+      });
+    }
+
+    const ledgerEntries = await prisma.riderLedgerEntry.findMany({
+      where: {
+        riderId: rider.id,
+      },
+      select: {
+        amount: true,
+        direction: true,
+      },
+    });
+
+    let totalCredits = 0;
+    let totalDebits = 0;
+
+    for (const entry of ledgerEntries) {
+      const amount = Number(entry.amount);
+
+      if (entry.direction === "CREDIT") {
+        totalCredits += amount;
+      } else if (entry.direction === "DEBIT") {
+        totalDebits += amount;
+      }
+    }
+
+    const pendingBalance = totalCredits - totalDebits;
+
+    return res.status(200).json({
+      success: true,
+      balance: {
+        totalEarned: totalCredits,
+        totalPaidOut: totalDebits,
+        pendingBalance,
+      },
+    });
+  } catch (error) {
+    console.error("Get rider earnings balance error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch rider earnings balance",
+    });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const getMyEarningsPayouts = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    const rider = await prisma.rider.findUnique({
+      where: { userId },
+    });
+
+    if (!rider) {
+      return res.status(404).json({
+        success: false,
+        message: "Rider profile not found",
+      });
+    }
+
+    const page = Math.max(Number(req.query.page) || 1, 1);
+    const limit = Math.min(Math.max(Number(req.query.limit) || 20, 1), 100);
+    const skip = (page - 1) * limit;
+
+    const [payouts, total] = await Promise.all([
+      prisma.riderPayout.findMany({
+        where: {
+          riderId: rider.id,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        skip,
+        take: limit,
+        select: {
+          id: true,
+          amount: true,
+          currency: true,
+          periodStart: true,
+          periodEnd: true,
+          status: true,
+          provider: true,
+          providerPayoutId: true,
+          paidAt: true,
+          failedAt: true,
+          failureReason: true,
+          referenceId: true,
+          createdAt: true,
+        },
+      }),
+
+      prisma.riderPayout.count({
+        where: {
+          riderId: rider.id,
+        },
+      }),
+    ]);
+
+    return res.status(200).json({
+      success: true,
+      payouts,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
+  } catch (error) {
+    console.error("Get rider payout history error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch rider payout history",
+    });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+const getMyWeeklyEarnings = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    const rider = await prisma.rider.findUnique({
+      where: { userId },
+    });
+
+    if (!rider) {
+      return res.status(404).json({
+        success: false,
+        message: "Rider profile not found",
+      });
+    }
+
+    const now = new Date();
+
+    // Monday 00:00:00 of current week
+    const startOfWeek = new Date(now);
+    const day = startOfWeek.getDay();
+    const diff = day === 0 ? 6 : day - 1;
+
+    startOfWeek.setDate(startOfWeek.getDate() - diff);
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    // Next Monday 00:00:00
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(endOfWeek.getDate() + 7);
+
+    const earnings = await prisma.riderLedgerEntry.findMany({
+      where: {
+        riderId: rider.id,
+        type: "EARNING",
+        direction: "CREDIT",
+        createdAt: {
+          gte: startOfWeek,
+          lt: endOfWeek,
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      select: {
+        id: true,
+        deliveryId: true,
+        amount: true,
+        description: true,
+        referenceId: true,
+        createdAt: true,
+      },
+    });
+
+    let totalEarnings = 0;
+
+    for (const earning of earnings) {
+      totalEarnings += Number(earning.amount);
+    }
+
+    return res.status(200).json({
+      success: true,
+      period: {
+        start: startOfWeek,
+        end: endOfWeek,
+      },
+      summary: {
+        totalDeliveries: earnings.length,
+        totalEarnings,
+      },
+      earnings,
+    });
+  } catch (error) {
+    console.error("Get rider weekly earnings error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch weekly rider earnings",
+    });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+const getMyMonthlyEarnings = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    const rider = await prisma.rider.findUnique({
+      where: { userId },
+    });
+
+    if (!rider) {
+      return res.status(404).json({
+        success: false,
+        message: "Rider profile not found",
+      });
+    }
+
+    const now = new Date();
+
+    // First day of current month, 00:00:00
+    const startOfMonth = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      1,
+      0,
+      0,
+      0,
+      0
+    );
+
+    // First day of next month, 00:00:00
+    const endOfMonth = new Date(
+      now.getFullYear(),
+      now.getMonth() + 1,
+      1,
+      0,
+      0,
+      0,
+      0
+    );
+
+    const earnings = await prisma.riderLedgerEntry.findMany({
+      where: {
+        riderId: rider.id,
+        type: "EARNING",
+        direction: "CREDIT",
+        createdAt: {
+          gte: startOfMonth,
+          lt: endOfMonth,
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      select: {
+        id: true,
+        deliveryId: true,
+        amount: true,
+        description: true,
+        referenceId: true,
+        createdAt: true,
+      },
+    });
+
+    let totalEarnings = 0;
+
+    for (const earning of earnings) {
+      totalEarnings += Number(earning.amount);
+    }
+
+    return res.status(200).json({
+      success: true,
+      period: {
+        start: startOfMonth,
+        end: endOfMonth,
+      },
+      summary: {
+        totalDeliveries: earnings.length,
+        totalEarnings,
+      },
+      earnings,
+    });
+  } catch (error) {
+    console.error("Get rider monthly earnings error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch monthly rider earnings",
+    });
+  }
+};
+
 
 
 
@@ -971,4 +1417,8 @@ module.exports = {
   deliverDelivery,
   getMyDeliveries,
   getMyEarnings,
+  getMyEarningsBalance,
+  getMyEarningsPayouts,
+  getMyWeeklyEarnings,
+  getMyMonthlyEarnings,
 };

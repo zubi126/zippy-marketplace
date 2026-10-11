@@ -1,0 +1,221 @@
+.rider-register-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  box-sizing: border-box;
+  background: #f8fafc;
+}
+
+.rider-register-card {
+  width: 100%;
+  max-width: 520px;
+  padding: 38px;
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+.rider-register-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.rider-register-icon {
+  font-size: 44px;
+  margin-bottom: 12px;
+}
+
+.rider-register-header h1 {
+  margin: 0;
+  color: #111827;
+  font-size: 28px;
+}
+
+.rider-register-header p {
+  margin: 8px 0 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.rider-register-error {
+  margin-bottom: 16px;
+  padding: 11px 13px;
+  border-radius: 8px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  font-size: 13px;
+}
+
+.rider-register-message {
+  margin-bottom: 16px;
+  padding: 11px 13px;
+  border-radius: 8px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #15803d;
+  font-size: 13px;
+}
+
+.rider-register-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.rider-register-form label {
+  margin: 11px 0 6px;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.rider-register-form input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  outline: none;
+  background: #ffffff;
+  color: #111827;
+  font-size: 14px;
+}
+
+.rider-register-form input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.rider-register-form button {
+  margin-top: 24px;
+  padding: 13px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.rider-register-form button:hover {
+  background: #1d4ed8;
+}
+
+.rider-register-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.rider-register-login {
+  margin: 22px 0 0;
+  text-align: center;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.rider-register-login span {
+  color: #2563eb;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.rider-register-login span:hover {
+  text-decoration: underline;
+}
+
+/* OTP screen */
+
+.rider-register-form input[name="otp"] {
+  text-align: center;
+  font-size: 20px;
+  letter-spacing: 5px;
+}
+
+.rider-register-back {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px 18px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.rider-register-back:hover {
+  background: #f9fafb;
+}
+
+@media (max-width: 640px) {
+  .rider-register-page {
+    padding: 20px 12px;
+  }
+
+  .rider-register-card {
+    padding: 26px 18px;
+  }
+
+  .rider-register-header h1 {
+    font-size: 24px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.rider-resend-otp {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.rider-resend-otp p {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.rider-resend-otp strong {
+  color: #0f172a;
+}
+
+.rider-resend-button {
+  border: none;
+  background: transparent;
+  color: #2563eb;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 6px;
+}
+
+.rider-resend-button:hover {
+  text-decoration: underline;
+}
+
+.rider-resend-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
