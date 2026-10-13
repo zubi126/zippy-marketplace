@@ -1,0 +1,134 @@
+
+.site-footer {
+  background: #101c17;
+  color: #ffffff;
+  margin-top: 64px;
+  font-family: inherit;
+}
+
+.footer-container {
+  width: min(1200px, 92%);
+  margin: 0 auto;
+  padding: 52px 0 40px;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1.2fr 1fr 1fr;
+  gap: 32px;
+}
+
+.footer-brand {
+  max-width: 290px;
+}
+
+.footer-logo {
+  color: #ffffff;
+  font-size: 29px;
+  font-weight: 800;
+  text-decoration: none;
+  letter-spacing: -0.8px;
+}
+
+.footer-logo span {
+  color: #b8df8a;
+}
+
+.footer-brand p {
+  color: #c7d5cc;
+  font-size: 14px;
+  line-height: 1.8;
+  margin: 16px 0;
+}
+
+.footer-brand .footer-location {
+  color: #b8df8a;
+  font-size: 13px;
+}
+
+.footer-column h3 {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 5px 0 20px;
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-column li {
+  margin-bottom: 13px;
+}
+
+.footer-column a {
+  color: #c7d5cc;
+  font-size: 13px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-column a:hover {
+  color: #b8df8a;
+}
+
+.footer-column a:focus-visible,
+.footer-logo:focus-visible {
+  outline: 2px solid #b8df8a;
+  outline-offset: 4px;
+}
+
+.footer-bottom {
+  border-top: 1px solid #34443b;
+  padding: 20px 4%;
+  text-align: center;
+}
+
+.footer-bottom p {
+  color: #c7d5cc;
+  font-size: 12px;
+  margin: 0;
+}
+
+@media (max-width: 1000px) {
+  .footer-container {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 32px 24px;
+  }
+
+  .footer-brand {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .site-footer {
+    margin-top: 40px;
+  }
+
+  .footer-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px 18px;
+    padding: 36px 0 28px;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+
+  .footer-logo {
+    font-size: 26px;
+  }
+
+  .footer-column h3 {
+    font-size: 14px;
+    margin-bottom: 15px;
+  }
+
+  .footer-column li {
+    margin-bottom: 12px;
+  }
+
+  .footer-column a {
+    font-size: 12px;
+    line-height: 1.6;
+  }
+}
