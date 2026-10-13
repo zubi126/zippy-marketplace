@@ -79,6 +79,47 @@ function Register() {
     }
   };
 
+
+
+
+
+
+
+
+
+  const handleResendOtp = async () => {
+    setError("");
+    setMessage("");
+
+    try {
+      setLoading(true);
+
+      const response = await api.post("/auth/send-otp", {
+        phone: form.phone,
+        purpose: "CUSTOMER_REGISTRATION",
+      });
+
+      setOtp("");
+      setMessage(
+        response.data?.message || "A new OTP has been sent to your phone."
+      );
+    } catch (error) {
+      setError(
+        error.response?.data?.message ||
+          "Unable to resend OTP. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+
+
+
+
+
+
   const verifyOtp = async () => {
     setError("");
     setMessage("");
@@ -276,6 +317,23 @@ function Register() {
                 {loading ? "Creating Account..." : "Verify & Create Account"}
               </button>
             </form>
+
+
+
+
+
+  <button
+    type="button"
+    className="register-back-button"
+    onClick={handleResendOtp}
+    disabled={loading}
+  >
+    {loading ? "Sending OTP..." : "Resend OTP"}
+  </button>
+
+
+
+
 
             <button
               type="button"
