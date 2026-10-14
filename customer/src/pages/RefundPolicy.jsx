@@ -171,6 +171,30 @@ function RefundPolicy() {
           services and procedures change. The latest
           version will be published on this page.
         </p>
+
+
+
+ <h2>12. Contact Information</h2>
+        <p>
+          If you have any questions regarding this Refund Policy
+          or need assistance with a refund request, please contact
+          MyKasho using the details below:
+        </p>
+        <p>
+          <strong>Phone:</strong>{" "}
+          <a href="tel:+919906920712">+91 99069 20712</a>
+        </p>
+        <p>
+          <strong>Email:</strong>{" "}
+          <a href="mailto:zubairahmadbhat920712@gmail.com">
+            zubairahmadbhat920712@gmail.com
+          </a>
+        </p>
+
+
+
+
+
       </section>
     </main>
   );
