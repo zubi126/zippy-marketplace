@@ -143,7 +143,9 @@ useEffect(() => {
         </div>
 
         <div className="top-actions">
-          <button type="button"><Icon name="phone" size={15} /> Need Help?</button>
+         <button type="button" onClick={() => navigate("/help")}>
+    <Icon name="phone" size={15} /> Need Help?
+  </button>
           <button type="button"><Icon name="store" size={15} /> Become a Seller</button>
           <button type="button" onClick={() => navigate("/orders")}>
             <Icon name="package" size={15} /> Track Order
