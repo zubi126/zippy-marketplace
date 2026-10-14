@@ -17,6 +17,7 @@ function AddProduct() {
     quantity: "",
     description: "",
     status: "active",
+    weightKg: "1",
   });
 
   const [image, setImage] = useState(null);
@@ -32,6 +33,10 @@ function AddProduct() {
   useEffect(() => {
     fetchCategories();
   }, []);
+
+
+
+
 
   const fetchCategories = async () => {
     try {
@@ -55,6 +60,9 @@ function AddProduct() {
     }
   };
 
+
+
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -66,6 +74,8 @@ function AddProduct() {
     setError("");
     setSuccess("");
   };
+
+
 
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
@@ -99,6 +109,9 @@ function AddProduct() {
       .replace(/^-+|-+$/g, "");
   };
 
+
+
+
   const handleNameChange = (e) => {
     const value = e.target.value;
 
@@ -111,6 +124,9 @@ function AddProduct() {
     setError("");
     setSuccess("");
   };
+
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -138,6 +154,16 @@ function AddProduct() {
       return;
     }
 
+
+   const parsedWeightKg = Number(form.weightKg);
+
+if (!Number.isFinite(parsedWeightKg) || parsedWeightKg <= 0) {
+  setError("Product weight must be greater than 0 kg.");
+  return;
+}
+
+
+
     try {
       setSaving(true);
 
@@ -164,6 +190,11 @@ function AddProduct() {
         "price",
         form.price
       );
+
+
+   formData.append("weightKg", String(parsedWeightKg));
+
+
       formData.append(
         "quantity",
         form.quantity || "0"
@@ -397,6 +428,39 @@ function AddProduct() {
               />
             </div>
           </div>
+
+
+
+
+
+
+
+
+{/* Product Weight */}
+<div className="add-product-field">
+  <label>
+    Product Weight (kg) <span>*</span>
+  </label>
+
+  <input
+    type="number"
+    name="weightKg"
+    value={form.weightKg}
+    onChange={handleChange}
+    placeholder="Enter weight in kg"
+    min="0.01"
+    step="0.01"
+    required
+  />
+</div>
+
+
+
+
+
+
+
+
 
           {/* Stock */}
           <div className="add-product-field">

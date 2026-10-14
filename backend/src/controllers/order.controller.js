@@ -611,11 +611,29 @@ const createOrder = async (req, res) => {
         0
       );
 
-      const deliveryFee = isRazorpayLiveTest
-        ? 0
-        : paymentMethod === "ONLINE"
-          ? 10
-          : 20;
+      const totalWeightKg = cart.items.reduce(
+  (total, item) =>
+    total +
+    Number(item.product.weightKg ?? 1) * item.quantity,
+  0
+);
+
+const weightBasedDeliveryFee =
+  totalWeightKg <= 2
+    ? 20
+    : totalWeightKg <= 5
+      ? 30
+      : totalWeightKg <= 10
+        ? 50
+        : totalWeightKg <= 20
+          ? 80
+          : totalWeightKg <= 30
+            ? 150
+            : 200;
+
+const deliveryFee = isRazorpayLiveTest
+  ? 0
+  : weightBasedDeliveryFee;
 
       const platformFee = isRazorpayLiveTest ? 0 : 20;
 
@@ -1069,12 +1087,57 @@ const getCheckoutSummary = async (req, res) => {
     );
 
     // Current fee rules applied per shop cart.
-    const deliveryFee = isRazorpayLiveTest
-      ? 0
-      : carts.reduce((total, cart) => {
-          if (cart.items.length === 0) return total;
-          return total + (paymentMethod === "ONLINE" ? 10 : 20);
-        }, 0);
+    // const deliveryFee = isRazorpayLiveTest
+    //   ? 0
+    //   : carts.reduce((total, cart) => {
+    //       if (cart.items.length === 0) return total;
+    //       return total + (paymentMethod === "ONLINE" ? 10 : 20);
+    //     }, 0);
+
+
+
+
+
+
+
+const deliveryFee = isRazorpayLiveTest
+  ? 0
+  : carts.reduce((total, cart) => {
+      if (cart.items.length === 0) return total;
+
+      const totalWeightKg = cart.items.reduce(
+        (weight, item) =>
+          weight +
+          Number(item.product.weightKg ?? 1) * item.quantity,
+        0
+      );
+
+      const cartDeliveryFee =
+        totalWeightKg <= 2
+          ? 20
+          : totalWeightKg <= 5
+            ? 30
+            : totalWeightKg <= 10
+              ? 50
+              : totalWeightKg <= 20
+                ? 80
+                : totalWeightKg <= 30
+                  ? 150
+                  : 200;
+
+      return total + cartDeliveryFee;
+    }, 0);
+
+
+
+
+
+
+
+
+
+
+
 
     const platformFee = isRazorpayLiveTest
       ? 0

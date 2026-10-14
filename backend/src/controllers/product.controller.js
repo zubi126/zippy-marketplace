@@ -82,6 +82,7 @@ const {
   price,
   quantity,
   lowStockThreshold,
+  weightKg,
 } = req.body;
 
     if (!categoryId || !name || !slug || price === undefined) {
@@ -108,6 +109,24 @@ if (!req.file) {
         message: "Price cannot be negative",
       });
     }
+
+
+
+
+
+const parsedWeightKg = Number(weightKg ?? 1);
+
+if (!Number.isFinite(parsedWeightKg) || parsedWeightKg <= 0) {
+  return res.status(400).json({
+    success: false,
+    message: "Product weight must be greater than 0 kg",
+  });
+}
+
+
+
+
+
 
     const ownerId = req.user.userId;
 
@@ -188,6 +207,7 @@ const imageUrl = uploadResult.secure_url;
         description: description || null,
         price,
         imageUrl,
+        weightKg: parsedWeightKg,
 inventory: {
   create: {
     quantity: Number(quantity ?? 0),
@@ -215,6 +235,18 @@ inventory: {
     });
   }
 };
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -469,6 +501,7 @@ const updateProduct = async (req, res) => {
   description,
   price,
   isAvailable,
+  weightKg,
 } = req.body;
 
 
@@ -547,6 +580,34 @@ if (req.file) {
       });
     }
 
+
+
+
+
+
+
+
+
+const parsedWeightKg =
+  weightKg !== undefined ? Number(weightKg) : undefined;
+
+if (
+  parsedWeightKg !== undefined &&
+  (!Number.isFinite(parsedWeightKg) || parsedWeightKg <= 0)
+) {
+  return res.status(400).json({
+    success: false,
+    message: "Product weight must be greater than 0 kg",
+  });
+}
+
+
+
+
+
+
+
+
     // Check slug conflict within the same shop
     if (slug !== undefined && slug !== product.slug) {
       const existingProduct = await prisma.product.findFirst({
@@ -577,6 +638,11 @@ if (req.file) {
         ...(slug !== undefined && { slug }),
         ...(description !== undefined && { description }),
         ...(price !== undefined && { price: Number(price) }),
+
+        ...(parsedWeightKg !== undefined && {
+            weightKg: parsedWeightKg,
+            }),
+
         ...(imageUrl !== undefined && { imageUrl }),
        ...(parsedIsAvailable !== undefined && {
   isAvailable: parsedIsAvailable,

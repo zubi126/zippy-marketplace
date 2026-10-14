@@ -157,6 +157,7 @@ model Product {
 
   isAvailable Boolean @default(true)
   isFeatured Boolean @default(false)
+  weightKg Float @default(1)
 
   shop        Shop     @relation(fields: [shopId], references: [id])
   category    Category @relation(fields: [categoryId], references: [id])
