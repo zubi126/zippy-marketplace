@@ -183,15 +183,15 @@ const categories = [
     className: "grocery-card",
     emoji: "🥬",
   },
-  {
-    title: "Pharmacy",
-    subtitle: "Health & Wellness",
-    description: "Medicines, healthcare & personal care",
-    button: "Shop Pharmacy",
-    path: "/products?category=pharmacy",
-    className: "pharmacy-card",
-    emoji: "💊",
-  },
+ {
+  title: "Personal Care",
+  subtitle: "Beauty & Daily Essentials",
+  description: "Skincare, beauty & personal care products",
+  button: "Shop Personal Care",
+  path: "/products?category=pharmacy",
+  className: "pharmacy-card",
+  emoji: "🧴",
+},
   {
     title: "Electronics",
     subtitle: "Latest Gadgets",
@@ -201,6 +201,8 @@ const categories = [
     className: "electronics-card",
     emoji: "📱",
   },
+
+
   {
     title: "Fashion",
     subtitle: "Style for Everyone",
@@ -349,11 +351,11 @@ decoding="async"
 
           {/* PHARMACY */}
           <article
-            className="promo-card pharmacy-promo"
-            onClick={() =>
-              navigate("/products?category=pharmacy")
-            }
-          >
+  className="promo-card pharmacy-promo"
+  onClick={() =>
+    navigate("/products?category=pharmacy")
+  }
+>
             <img
               src="https://images.pexels.com/photos/14797864/pexels-photo-14797864.jpeg"
               alt="Pharmacy"
@@ -361,14 +363,14 @@ decoding="async"
               decoding="async"
             />
 
-            <div className="promo-card-overlay"></div>
+           <div className="promo-card-overlay"></div>
 
-            <div className="promo-card-content">
-              <span>HEALTH & WELLNESS</span>
-              <h3>Pharmacy</h3>
-              <p>Healthcare & personal care</p>
-              <strong>Explore →</strong>
-            </div>
+  <div className="promo-card-content">
+    <span>BEAUTY & DAILY ESSENTIALS</span>
+    <h3>Personal Care</h3>
+    <p>Skincare, beauty & personal care</p>
+    <strong>Explore →</strong>
+  </div>
           </article>
 
           {/* FASHION */}
@@ -428,9 +430,10 @@ decoding="async"
 
 
 
-{/* PHARMACY */}
+
+{/* PERSONAL CARE */}
 <CategoryProductSection
-  title="Pharmacy"
+  title="Personal Care"
   category="pharmacy"
 />
 
