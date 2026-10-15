@@ -188,7 +188,7 @@ const categories = [
   subtitle: "Beauty & Daily Essentials",
   description: "Skincare, beauty & personal care products",
   button: "Shop Personal Care",
-  path: "/products?category=pharmacy",
+  path: "/products?category=personal-care",
   className: "pharmacy-card",
   emoji: "🧴",
 },
@@ -349,16 +349,16 @@ decoding="async"
             </div>
           </article>
 
-          {/* PHARMACY */}
+        {/* PERSONAL CARE */}
           <article
   className="promo-card pharmacy-promo"
   onClick={() =>
-    navigate("/products?category=pharmacy")
-  }
+  navigate("/products?category=personal-care")
+}
 >
             <img
               src="https://images.pexels.com/photos/14797864/pexels-photo-14797864.jpeg"
-              alt="Pharmacy"
+              alt="Personal Care"
               loading="lazy"
               decoding="async"
             />
@@ -434,7 +434,7 @@ decoding="async"
 {/* PERSONAL CARE */}
 <CategoryProductSection
   title="Personal Care"
-  category="pharmacy"
+  category="personal-care"
 />
 
 

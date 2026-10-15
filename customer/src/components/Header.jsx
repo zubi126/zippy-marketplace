@@ -102,7 +102,7 @@ useEffect(() => {
     {
   name: "Personal Care",
   subtitle: "Beauty & Daily Essentials",
-  path: "/products?category=pharmacy",
+  path: "/products?category=personal-care",
   icon: "pill",
   tone: "rose"
 },
@@ -197,7 +197,7 @@ useEffect(() => {
 >
       <option value="all">All Categories</option>
       <option value="grocery">Grocery</option>
-     <option value="pharmacy">Personal Care</option>
+     <option value="personal-care">Personal Care</option>
       <option value="electronics">Electronics</option>
       <option value="fashion">Fashion</option>
       <option value="shops">Local Shops</option>

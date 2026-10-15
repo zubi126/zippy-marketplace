@@ -77,17 +77,12 @@ const sortedProducts = [...products].sort((a, b) => {
 
 
 
-  // const pageTitle = search
-  //   ? `Search results for "${search}"`
-  //   : category
-  //     ? category.charAt(0).toUpperCase() + category.slice(1)
-  //     : "All Products";
 
 
   
 const pageTitle = search
   ? `Search results for "${search}"`
-  : category === "pharmacy"
+  : category === "personal-care"
     ? "Personal Care"
     : category
       ? category.charAt(0).toUpperCase() + category.slice(1)
@@ -152,20 +147,14 @@ const pageTitle = search
                 Grocery
               </button>
 
-              {/* <button
-                onClick={() =>
-                  navigate("/products?category=pharmacy")
-                }
-              >
-                Pharmacy
-              </button> */}
+            
 
 
 
 
 <button
   onClick={() =>
-    navigate("/products?category=pharmacy")
+    navigate("/products?category=personal-care")
   }
 >
   Personal Care

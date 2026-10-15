@@ -6,7 +6,7 @@ const categories = [
   { label: "Grocery", path: "/products?category=grocery" },
   { label: "Home & Kitchen", path: "/products?category=home-kitchen" },
   { label: "Electronics", path: "/products?category=electronics" },
-  { label: "Pharmacy", path: "/products?category=pharmacy" },
+ { label: "Personal Care", path: "/products?category=personal-care" },
   { label: "Fashion", path: "/products?category=fashion" },
   { label: "Local Shops", path: "/shops" },
 ];
