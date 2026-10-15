@@ -598,7 +598,7 @@ const createOrder = async (req, res) => {
     const isRazorpayLiveTest = allItems.some(
       (item) =>
         item.productId ===
-        "eddf1921-5fc9-4aef-9c18-f9d67a067c87"
+        "4d0e142c-8b95-4b33-8b99-b3492711f341"
     );
 
     const commissionRate = 10;
