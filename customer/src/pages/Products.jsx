@@ -77,11 +77,22 @@ const sortedProducts = [...products].sort((a, b) => {
 
 
 
-  const pageTitle = search
-    ? `Search results for "${search}"`
+  // const pageTitle = search
+  //   ? `Search results for "${search}"`
+  //   : category
+  //     ? category.charAt(0).toUpperCase() + category.slice(1)
+  //     : "All Products";
+
+
+  
+const pageTitle = search
+  ? `Search results for "${search}"`
+  : category === "pharmacy"
+    ? "Personal Care"
     : category
       ? category.charAt(0).toUpperCase() + category.slice(1)
       : "All Products";
+
 
   return (
     <main className="products-page">
@@ -141,13 +152,29 @@ const sortedProducts = [...products].sort((a, b) => {
                 Grocery
               </button>
 
-              <button
+              {/* <button
                 onClick={() =>
                   navigate("/products?category=pharmacy")
                 }
               >
                 Pharmacy
-              </button>
+              </button> */}
+
+
+
+
+<button
+  onClick={() =>
+    navigate("/products?category=pharmacy")
+  }
+>
+  Personal Care
+</button>
+
+
+
+
+
 
               <button
                 onClick={() =>
