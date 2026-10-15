@@ -184,13 +184,13 @@ const categories = [
     emoji: "🥬",
   },
  {
-  title: "Personal Care",
-  subtitle: "Beauty & Daily Essentials",
-  description: "Skincare, beauty & personal care products",
-  button: "Shop Personal Care",
-  path: "/products?category=personal-care",
-  className: "pharmacy-card",
-  emoji: "🧴",
+ title: "Beauty & Cosmetics",
+subtitle: "Skincare & Makeup",
+description: "Skincare, makeup & beauty products",
+button: "Shop Beauty",
+path: "/products?category=beauty-cosmetics",
+className: "pharmacy-card",
+emoji: "💄",
 },
   {
     title: "Electronics",
@@ -353,12 +353,12 @@ decoding="async"
           <article
   className="promo-card pharmacy-promo"
   onClick={() =>
-  navigate("/products?category=personal-care")
+  navigate("/products?category=beauty-cosmetics")
 }
 >
             <img
               src="https://images.pexels.com/photos/14797864/pexels-photo-14797864.jpeg"
-              alt="Personal Care"
+              alt="Beauty & Cosmetics"
               loading="lazy"
               decoding="async"
             />
@@ -366,9 +366,9 @@ decoding="async"
            <div className="promo-card-overlay"></div>
 
   <div className="promo-card-content">
-    <span>BEAUTY & DAILY ESSENTIALS</span>
-    <h3>Personal Care</h3>
-    <p>Skincare, beauty & personal care</p>
+   <span>BEAUTY & COSMETICS</span>
+<h3>Beauty & Cosmetics</h3>
+<p>Skincare, makeup & beauty products</p>
     <strong>Explore →</strong>
   </div>
           </article>
@@ -433,8 +433,8 @@ decoding="async"
 
 {/* PERSONAL CARE */}
 <CategoryProductSection
-  title="Personal Care"
-  category="personal-care"
+  title="Beauty & Cosmetics"
+  category="beauty-cosmetics"
 />
 
 

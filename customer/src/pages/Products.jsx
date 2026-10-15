@@ -82,8 +82,8 @@ const sortedProducts = [...products].sort((a, b) => {
   
 const pageTitle = search
   ? `Search results for "${search}"`
-  : category === "personal-care"
-    ? "Personal Care"
+  : category === "beauty-cosmetics"
+  ? "Beauty & Cosmetics"
     : category
       ? category.charAt(0).toUpperCase() + category.slice(1)
       : "All Products";
@@ -151,13 +151,12 @@ const pageTitle = search
 
 
 
-
 <button
   onClick={() =>
-    navigate("/products?category=personal-care")
+    navigate("/products?category=beauty-cosmetics")
   }
 >
-  Personal Care
+  Beauty & Cosmetics
 </button>
 
 

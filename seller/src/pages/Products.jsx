@@ -289,8 +289,8 @@ useEffect(() => {
               Grocery
             </option>
 
-           <option value="personal-care">
-  Personal Care
+        <option value="beauty-cosmetics">
+  Beauty & Cosmetics
 </option>
 
             <option value="electronics">

@@ -99,10 +99,10 @@ useEffect(() => {
 
   const categories = [
     { name: "Grocery", subtitle: "Fruits, Vegetables & More", path: "/products?category=grocery", icon: "basket", tone: "green" },
-    {
-  name: "Personal Care",
-  subtitle: "Beauty & Daily Essentials",
-  path: "/products?category=personal-care",
+   {
+  name: "Beauty & Cosmetics",
+  subtitle: "Skincare & Makeup",
+  path: "/products?category=beauty-cosmetics",
   icon: "pill",
   tone: "rose"
 },
@@ -197,7 +197,7 @@ useEffect(() => {
 >
       <option value="all">All Categories</option>
       <option value="grocery">Grocery</option>
-     <option value="personal-care">Personal Care</option>
+    <option value="beauty-cosmetics">Beauty & Cosmetics</option>
       <option value="electronics">Electronics</option>
       <option value="fashion">Fashion</option>
       <option value="shops">Local Shops</option>
