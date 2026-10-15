@@ -99,7 +99,14 @@ useEffect(() => {
 
   const categories = [
     { name: "Grocery", subtitle: "Fruits, Vegetables & More", path: "/products?category=grocery", icon: "basket", tone: "green" },
-    { name: "Pharmacy", subtitle: "Medicines & Wellness", path: "/products?category=pharmacy", icon: "pill", tone: "rose" },
+    {
+  name: "Personal Care",
+  subtitle: "Beauty & Daily Essentials",
+  path: "/products?category=pharmacy",
+  icon: "pill",
+  tone: "rose"
+},
+    // { name: "Pharmacy", subtitle: "Medicines & Wellness", path: "/products?category=pharmacy", icon: "pill", tone: "rose" },
     { name: "Electronics", subtitle: "Mobiles, Appliances", path: "/products?category=electronics", icon: "mobile", tone: "blue" },
     { name: "Fashion", subtitle: "Men, Women & Kids", path: "/products?category=fashion", icon: "shirt", tone: "violet" },
     { name: "Local Shops", subtitle: "Your Nearby Stores", path: "/shops", icon: "store", tone: "amber" },
@@ -190,7 +197,7 @@ useEffect(() => {
 >
       <option value="all">All Categories</option>
       <option value="grocery">Grocery</option>
-      <option value="pharmacy">Pharmacy</option>
+     <option value="pharmacy">Personal Care</option>
       <option value="electronics">Electronics</option>
       <option value="fashion">Fashion</option>
       <option value="shops">Local Shops</option>
