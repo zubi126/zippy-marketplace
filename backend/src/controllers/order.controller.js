@@ -1762,8 +1762,21 @@ const getShopOrders = async (req, res) => {
     // Get orders for this shop
     const orders = await prisma.order.findMany({
       where: {
-        shopId: shop.id,
-      },
+  shopId: shop.id,
+
+  OR: [
+    // COD orders remain visible
+    {
+      paymentMethod: "COD",
+    },
+
+    // ONLINE orders require confirmed payment
+    {
+      paymentMethod: "ONLINE",
+      paymentStatus: "PAID",
+    },
+  ],
+},
       include: {
         customer: {
           select: {
