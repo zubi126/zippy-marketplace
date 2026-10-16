@@ -89,9 +89,25 @@ const getRazorpayOrderPayments = async ({ razorpayOrderId }) => {
 
 
 
+
+
+
+const getRazorpayPayment = async ({ razorpayPaymentId }) => {
+  if (!razorpayPaymentId) {
+    throw new Error("Razorpay payment ID is required");
+  }
+
+  return razorpay.payments.fetch(razorpayPaymentId);
+};
+
+
+
+
+
 module.exports = {
   createRazorpayOrder,
   verifyRazorpayPayment,
   refundRazorpayPayment,
   getRazorpayOrderPayments,
+  getRazorpayPayment,
 };

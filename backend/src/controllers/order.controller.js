@@ -4,435 +4,12 @@ const {
   createRazorpayOrder,
   verifyRazorpayPayment,
   getRazorpayOrderPayments,
+  getRazorpayPayment,
 } = require("../services/payment.service");
 
 const {
   assignOrderToNearestRider,
 } = require("../services/delivery.service");
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const createOrder = async (req, res) => {
-//   try {
-//     const { addressId, paymentMethod = "COD" } = req.body;
-
-//     const customerId = req.user.userId;
-
-//     // 1. Validate payment method
-//     if (!["COD", "ONLINE"].includes(paymentMethod)) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Invalid payment method",
-//       });
-//     }
-
-//     // 2. Find customer
-//     const customer = await prisma.user.findUnique({
-//       where: {
-//         id: customerId,
-//       },
-//       select: {
-//         name: true,
-//         phone: true,
-//       },
-//     });
-
-//     if (!customer) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "Customer not found",
-//       });
-//     }
-
-//     // 3. Find customer's active cart
-//     const cart = await prisma.cart.findFirst({
-//       where: {
-//         customerId,
-//         status: "ACTIVE",
-//       },
-//       include: {
-//         shop: true,
-//         items: {
-//           include: {
-//             product: {
-//               include: {
-//                 inventory: true,
-//               },
-//             },
-//           },
-//         },
-//       },
-//     });
-
-//     if (!cart) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Cart not found",
-//       });
-//     }
-
-//     // 4. Check cart items
-//     if (cart.items.length === 0) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Cart is empty",
-//       });
-//     }
-
-//     // 5. Check shop availability
-//     if (
-//       !cart.shop.isOpen ||
-//       !cart.shop.isActive ||
-//       cart.shop.verificationStatus !== "APPROVED"
-//     ) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Shop is currently unavailable",
-//       });
-//     }
-
-//     // 6. Find customer's address
-//     const address = await prisma.address.findFirst({
-//       where: {
-//         id: addressId,
-//         userId: customerId,
-//       },
-//     });
-
-//     if (!address) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "Address not found",
-//       });
-//     }
-
-//     // 7. Check products and stock
-//     for (const item of cart.items) {
-//       const product = item.product;
-
-//       if (!product.isAvailable) {
-//         return res.status(400).json({
-//           success: false,
-//           message: `${product.name} is currently unavailable`,
-//         });
-//       }
-
-//       if (!product.inventory) {
-//         return res.status(400).json({
-//           success: false,
-//           message: `Inventory not found for ${product.name}`,
-//         });
-//       }
-
-//       const availableQuantity =
-//         product.inventory.quantity -
-//         product.inventory.reservedQuantity;
-
-//       if (item.quantity > availableQuantity) {
-//         return res.status(400).json({
-//           success: false,
-//           message: `Only ${availableQuantity} units of ${product.name} are available`,
-//         });
-//       }
-//     }
-
-//     // 8. Calculate subtotal
-//     const subtotal = cart.items.reduce((total, item) => {
-//       return total + Number(item.product.price) * item.quantity;
-//     }, 0);
-
-
-
-
-//     // // 9. Delivery + platform fee
-//     // const deliveryFee = paymentMethod === "ONLINE" ? 20 : 40;
-//     // const platformFee = 20;
-//     // const total = subtotal + deliveryFee + platformFee;
-
-
-
-//     // 9. Delivery + platform fee
-// const isRazorpayLiveTest = cart.items.some(
-//   (item) =>
-//     item.productId === "eddf1921-5fc9-4aef-9c18-f9d67a067c87"
-// );
-
-// const deliveryFee = isRazorpayLiveTest
-//   ? 0
-//   : paymentMethod === "ONLINE"
-//     ? 10
-//     : 20;
-
-// const platformFee = isRazorpayLiveTest ? 0 : 20;
-
-// const total = subtotal + deliveryFee + platformFee;
-
-
-
-
-
-
-
-
-// const commissionRate = 10;
-
-// const commissionAmount = Number(
-//   ((subtotal * commissionRate) / 100).toFixed(2)
-// );
-
-// const sellerPayableAmount = Number(
-//   (subtotal - commissionAmount).toFixed(2)
-// );
-
-
-
-
-
-
-//     // 10. Generate order number
-//     const orderNumber = `AN-${Date.now()}`;
-
-//     // 11. Create Order + Payment + reserve stock + checkout cart
-//     const order = await prisma.$transaction(async (tx) => {
-//       const newOrder = await tx.order.create({
-//         data: {
-//           orderNumber,
-//           customerId,
-//           shopId: cart.shopId,
-
-//           subtotal,
-//           deliveryFee,
-//           platformFee,
-//           total,
-
-
-//           commissionRate,
-// commissionAmount,
-// sellerPayableAmount,
-
-
-//           paymentMethod,
-//           paymentStatus: "PENDING",
-//           status: "PENDING",
-
-//           // Address snapshot
-//           deliveryName: customer.name,
-//           deliveryPhone: customer.phone,
-//           deliveryFullAddress: address.fullAddress,
-//           deliveryCity: address.city,
-//           deliveryState: address.state,
-//           deliveryPincode: address.pincode,
-//           deliveryLatitude: address.latitude,
-//           deliveryLongitude: address.longitude,
-
-//           items: {
-//             create: cart.items.map((item) => ({
-//               productId: item.productId,
-//               productName: item.product.name,
-//               unitPrice: item.product.price,
-//               quantity: item.quantity,
-//               lineTotal:
-//                 Number(item.product.price) * item.quantity,
-//             })),
-//           },
-//         },
-
-//         include: {
-//           items: true,
-//           shop: true,
-//         },
-//       });
-
-//       // Create Payment record BEFORE Razorpay call
-//       await tx.payment.create({
-//         data: {
-//           orderId: newOrder.id,
-//           provider: paymentMethod === "ONLINE" ? "razorpay" : "cod",
-//           method: paymentMethod,
-//           amount: total,
-//           currency: "INR",
-//           status: "PENDING",
-//         },
-//       });
-
-//       // Reserve stock
-//      // Reserve stock atomically
-// // Stock will be reserved only if enough unreserved quantity exists.
-// const itemsToReserve = [...cart.items].sort((a, b) =>
-//   a.productId.localeCompare(b.productId)
-// );
-
-// for (const item of itemsToReserve) {
-//   const reserved = await tx.$queryRaw`
-//     UPDATE "Inventory"
-//     SET "reservedQuantity" = "reservedQuantity" + ${item.quantity}
-//     WHERE "productId" = ${item.productId}
-//       AND "quantity" - "reservedQuantity" >= ${item.quantity}
-//     RETURNING "productId", "reservedQuantity";
-//   `;
-
-//   if (reserved.length === 0) {
-//     const error = new Error(
-//       `Only available stock can be reserved for ${item.product.name}`
-//     );
-
-//     error.code = "INSUFFICIENT_STOCK";
-//     error.productName = item.product.name;
-
-//     throw error;
-//   }
-// }
-
-//       // Mark cart as checked out
-//       await tx.cart.update({
-//         where: {
-//           id: cart.id,
-//         },
-//         data: {
-//           status: "CHECKED_OUT",
-//         },
-//       });
-
-//       return newOrder;
-//     });
-
-//     // 12. Create Razorpay order for ONLINE payment
-//     let razorpayOrder = null;
-
-//     if (paymentMethod === "ONLINE") {
-//       try {
-//         razorpayOrder = await createRazorpayOrder({
-//           orderId: order.id,
-//           amount: total,
-//         });
-
-//         // Save Razorpay order ID
-//         await prisma.payment.update({
-//           where: {
-//             orderId: order.id,
-//           },
-//           data: {
-//             providerOrderId: razorpayOrder.id,
-//           },
-//         });
-//       } catch (razorpayError) {
-//         console.error("Razorpay order creation failed:", razorpayError);
-
-//         // Rollback database state
-//         await prisma.$transaction(async (tx) => {
-//           // Get order items
-//           const orderItems = await tx.orderItem.findMany({
-//             where: {
-//               orderId: order.id,
-//             },
-//           });
-
-//           // Release reserved stock
-//           for (const item of orderItems) {
-//             await tx.inventory.update({
-//               where: {
-//                 productId: item.productId,
-//               },
-//               data: {
-//                 reservedQuantity: {
-//                   decrement: item.quantity,
-//                 },
-//               },
-//             });
-//           }
-
-//           // Mark payment as failed
-//           await tx.payment.update({
-//             where: {
-//               orderId: order.id,
-//             },
-//             data: {
-//               status: "FAILED",
-//               failedAt: new Date(),
-//             },
-//           });
-
-//           // Cancel order
-//           await tx.order.update({
-//             where: {
-//               id: order.id,
-//             },
-//             data: {
-//               status: "CANCELLED",
-//               paymentStatus: "FAILED",
-//             },
-//           });
-
-//           // Restore cart
-//           await tx.cart.update({
-//             where: {
-//               id: cart.id,
-//             },
-//             data: {
-//               status: "ACTIVE",
-//             },
-//           });
-//         });
-
-//         return res.status(502).json({
-//           success: false,
-//           message: "Online payment initialization failed",
-//         });
-//       }
-//     }
-
-//     // 13. Get payment record
-//     const payment = await prisma.payment.findUnique({
-//       where: {
-//         orderId: order.id,
-//       },
-//     });
-
-//     // 14. Return response
-//     return res.status(201).json({
-//       success: true,
-//       message: "Order created successfully",
-//       order,
-//       payment,
-//       razorpay: razorpayOrder
-//         ? {
-//             keyId: process.env.RAZORPAY_KEY_ID,
-//             orderId: razorpayOrder.id,
-//             amount: razorpayOrder.amount,
-//             currency: razorpayOrder.currency,
-//           }
-//         : null,
-//     });
-//   } catch (error) {
-//   console.error("Create order error:", error);
-
-//   if (error.code === "INSUFFICIENT_STOCK") {
-//     return res.status(400).json({
-//       success: false,
-//       message: `${error.productName} does not have enough stock available`,
-//     });
-//   }
-
-//   return res.status(500).json({
-//     success: false,
-//     message: "Failed to create order",
-//   });
-// }
-// };
-
-
-
-
 
 
 
@@ -1176,134 +753,6 @@ const deliveryFee = isRazorpayLiveTest
 
 
 
-
-
-
-
-
-
-
-
-// const verifyPayment = async (req, res) => {
-//   try {
-//     const {
-//       razorpay_order_id,
-//       razorpay_payment_id,
-//       razorpay_signature,
-//     } = req.body;
-
-//     // 1. Validate required fields
-//     if (
-//       !razorpay_order_id ||
-//       !razorpay_payment_id ||
-//       !razorpay_signature
-//     ) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Missing Razorpay payment details",
-//       });
-//     }
-
-//     // 2. Verify Razorpay signature
-//     const isValid = verifyRazorpayPayment({
-//       razorpayOrderId: razorpay_order_id,
-//       razorpayPaymentId: razorpay_payment_id,
-//       razorpaySignature: razorpay_signature,
-//     });
-
-//     if (!isValid) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Invalid payment signature",
-//       });
-//     }
-
-//     // 3. Find payment
-//     const payment = await prisma.payment.findUnique({
-//       where: {
-//         providerOrderId: razorpay_order_id,
-//       },
-//       include: {
-//         order: true,
-//       },
-//     });
-
-//     if (!payment) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "Payment not found",
-//       });
-//     }
-
-//     // 4. Make sure this payment belongs to logged-in customer
-//     if (payment.order.customerId !== req.user.userId) {
-//       return res.status(403).json({
-//         success: false,
-//         message: "Unauthorized payment access",
-//       });
-//     }
-
-//     // 5. Prevent duplicate verification
-//     if (payment.status === "PAID") {
-//       return res.status(200).json({
-//         success: true,
-//         message: "Payment already verified",
-//         payment,
-//       });
-//     }
-
-//     // 6. Update payment + order atomically
-//     const result = await prisma.$transaction(async (tx) => {
-//       const updatedPayment = await tx.payment.update({
-//         where: {
-//           id: payment.id,
-//         },
-//         data: {
-//           providerPaymentId: razorpay_payment_id,
-//           status: "PAID",
-//           paidAt: new Date(),
-//         },
-//       });
-
-//       const updatedOrder = await tx.order.update({
-//         where: {
-//           id: payment.orderId,
-//         },
-//         data: {
-//           paymentStatus: "PAID",
-//         },
-//       });
-
-//       return {
-//         updatedPayment,
-//         updatedOrder,
-//       };
-//     });
-
-//     return res.status(200).json({
-//       success: true,
-//       message: "Payment verified successfully",
-//       payment: result.updatedPayment,
-//       order: result.updatedOrder,
-//     });
-//   } catch (error) {
-//     console.error("Verify payment error:", error);
-
-//     return res.status(500).json({
-//       success: false,
-//       message: "Failed to verify payment",
-//     });
-//   }
-// };
-
-
-
-
-
-
-
-
-
 // changed verify payment 
 
 const verifyPayment = async (req, res) => {
@@ -1340,6 +789,56 @@ const verifyPayment = async (req, res) => {
       });
     }
 
+
+
+
+
+
+
+
+    // Verify the actual payment directly with Razorpay.
+    let razorpayPayment;
+
+    try {
+      razorpayPayment = await getRazorpayPayment({
+        razorpayPaymentId: razorpay_payment_id,
+      });
+    } catch (error) {
+      console.error("Razorpay payment fetch failed:", error);
+
+      return res.status(503).json({
+        success: false,
+        message: "Unable to verify payment with Razorpay. Please retry.",
+      });
+    }
+
+    // The payment must belong to the submitted Razorpay order.
+    if (
+      razorpayPayment.id !== razorpay_payment_id ||
+      razorpayPayment.order_id !== razorpay_order_id
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Razorpay payment does not match the submitted order",
+      });
+    }
+
+    // Only a captured payment can be marked as PAID.
+    if (razorpayPayment.status !== "captured") {
+      return res.status(400).json({
+        success: false,
+        message: "Payment has not been captured yet",
+      });
+    }
+
+
+
+
+
+
+
+
+
     // 3. First check for a combined multi-shop checkout payment.
     const checkoutPayment = await prisma.checkoutPayment.findUnique({
       where: {
@@ -1365,6 +864,18 @@ const verifyPayment = async (req, res) => {
           message: "This checkout is not an online payment",
         });
       }
+
+
+      if (
+  Number(razorpayPayment.amount) !==
+    Math.round(Number(checkoutPayment.amount) * 100) ||
+  razorpayPayment.currency !== checkoutPayment.currency
+) {
+  return res.status(400).json({
+    success: false,
+    message: "Razorpay payment amount or currency mismatch",
+  });
+}
 
       // 5. Make verification retries idempotent.
       if (checkoutPayment.status === "PAID") {
@@ -1451,9 +962,55 @@ const verifyPayment = async (req, res) => {
         });
 
         // Cancellation or another request may have changed the status.
+        // if (checkoutUpdate.count !== 1) {
+        //   throw new Error("CHECKOUT_PAYMENT_NOT_PENDING");
+        // }
+
+
+
+
+
+
+        // Another request may have verified the checkout concurrently.
         if (checkoutUpdate.count !== 1) {
+          const latestCheckoutPayment =
+            await tx.checkoutPayment.findUnique({
+              where: {
+                id: currentCheckoutPayment.id,
+              },
+            });
+
+          if (latestCheckoutPayment?.status === "PAID") {
+            const existingOrders = await tx.order.findMany({
+              where: {
+                checkoutPaymentId: currentCheckoutPayment.id,
+                customerId: req.user.userId,
+              },
+              include: {
+                shop: true,
+                items: true,
+                payment: true,
+              },
+            });
+
+            return {
+              alreadyVerified: true,
+              checkoutPayment: latestCheckoutPayment,
+              orders: existingOrders,
+            };
+          }
+
           throw new Error("CHECKOUT_PAYMENT_NOT_PENDING");
         }
+
+
+
+
+
+
+
+
+
 
         const updatedCheckoutPayment =
           await tx.checkoutPayment.findUnique({
@@ -1569,6 +1126,29 @@ const verifyPayment = async (req, res) => {
       });
     }
 
+
+
+
+
+   
+    // Verify the actual Razorpay payment amount and currency.
+    if (
+      Number(razorpayPayment.amount) !==
+        Math.round(Number(payment.amount) * 100) ||
+      razorpayPayment.currency !== payment.currency
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Razorpay payment amount or currency mismatch",
+      });
+    }
+
+
+
+
+
+
+
     // 9. Prevent duplicate verification for older payments.
     if (payment.status === "PAID") {
       return res.status(200).json({
@@ -1617,9 +1197,26 @@ const verifyPayment = async (req, res) => {
         throw new Error("PAYMENT_NOT_PENDING");
       }
 
-      const updatedPayment = await tx.payment.update({
+      // const updatedPayment = await tx.payment.update({
+      //   where: {
+      //     id: currentPayment.id,
+      //   },
+      //   data: {
+      //     providerPaymentId: razorpay_payment_id,
+      //     status: "PAID",
+      //     paidAt: new Date(),
+      //   },
+      // });
+
+
+
+
+
+      // Atomically claim the PENDING payment to prevent duplicate processing.
+      const paymentUpdate = await tx.payment.updateMany({
         where: {
           id: currentPayment.id,
+          status: "PENDING",
         },
         data: {
           providerPaymentId: razorpay_payment_id,
@@ -1627,6 +1224,47 @@ const verifyPayment = async (req, res) => {
           paidAt: new Date(),
         },
       });
+
+      if (paymentUpdate.count !== 1) {
+        // Another request may have verified the payment concurrently.
+        const latestPayment = await tx.payment.findUnique({
+          where: {
+            id: currentPayment.id,
+          },
+          include: {
+            order: true,
+          },
+        });
+
+        if (latestPayment?.status === "PAID") {
+          return {
+            alreadyVerified: true,
+            updatedPayment: latestPayment,
+            updatedOrder: latestPayment.order,
+          };
+        }
+
+        throw new Error("PAYMENT_NOT_PENDING");
+      }
+
+      const updatedPayment = await tx.payment.findUnique({
+        where: {
+          id: currentPayment.id,
+        },
+      });
+
+      if (!updatedPayment) {
+        throw new Error("PAYMENT_NOT_FOUND");
+      }
+
+
+
+
+
+
+
+
+
 
       const updatedOrder = await tx.order.update({
         where: {
@@ -1662,6 +1300,21 @@ const verifyPayment = async (req, res) => {
       });
     }
 
+
+
+
+    if (error.message === "PAYMENT_NOT_FOUND") {
+      return res.status(404).json({
+        success: false,
+        message: "Payment not found",
+      });
+    }
+
+
+
+
+
+
     if (
       error.message === "CHECKOUT_PAYMENT_NOT_PENDING" ||
       error.message === "PAYMENT_NOT_PENDING"
@@ -1692,6 +1345,188 @@ const verifyPayment = async (req, res) => {
     });
   }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ // RETRY PAYMENT FOR AN EXISTING CHECKOUT
+const retryPayment = async (req, res) => {
+  try {
+    const { checkoutPaymentId } = req.params;
+    const customerId = req.user.userId;
+
+    const checkoutPayment = await prisma.checkoutPayment.findFirst({
+      where: {
+        id: checkoutPaymentId,
+        customerId,
+      },
+      include: {
+        orders: {
+          select: {
+            id: true,
+            status: true,
+            paymentStatus: true,
+          },
+        },
+      },
+    });
+
+    if (!checkoutPayment) {
+      return res.status(404).json({
+        success: false,
+        message: "Checkout payment not found.",
+      });
+    }
+
+    if (checkoutPayment.method !== "ONLINE") {
+      return res.status(400).json({
+        success: false,
+        message: "Retry is only available for online payments.",
+      });
+    }
+
+    if (checkoutPayment.status === "PAID") {
+      return res.status(409).json({
+        success: false,
+        message: "This checkout has already been paid.",
+      });
+    }
+
+    if (checkoutPayment.status !== "PENDING") {
+      return res.status(409).json({
+        success: false,
+        message:
+          "This checkout is not pending. Please contact support for payment reconciliation.",
+      });
+    }
+
+    if (
+      checkoutPayment.orders.length === 0 ||
+      checkoutPayment.orders.some(
+        (order) => order.status === "CANCELLED"
+      )
+    ) {
+      return res.status(409).json({
+        success: false,
+        message:
+          "This checkout contains cancelled orders and cannot be retried automatically.",
+      });
+    }
+
+    // Check the previous Razorpay order before creating another.
+    if (checkoutPayment.providerOrderId) {
+      let gatewayPayments;
+
+      try {
+        gatewayPayments = await getRazorpayOrderPayments({
+          razorpayOrderId: checkoutPayment.providerOrderId,
+        });
+      } catch (gatewayError) {
+        console.error("Retry payment lookup failed:", gatewayError);
+
+        return res.status(503).json({
+          success: false,
+          message:
+            "Unable to confirm the previous payment status. Please try again later.",
+        });
+      }
+
+      if (
+        gatewayPayments.some(
+          (payment) =>
+            payment.status === "captured" ||
+            payment.status === "authorized"
+        )
+      ) {
+        return res.status(409).json({
+          success: false,
+          message:
+            "A previous payment may have succeeded. Payment reconciliation is required before retrying.",
+        });
+      }
+
+      if (
+        gatewayPayments.some(
+          (payment) => payment.status !== "failed"
+        )
+      ) {
+        return res.status(409).json({
+          success: false,
+          message:
+            "A previous payment attempt is still unresolved. Please try again after its status is confirmed.",
+        });
+      }
+    }
+
+    const razorpayOrder = await createRazorpayOrder({
+      orderId: checkoutPayment.checkoutNumber,
+      amount: checkoutPayment.amount,
+    });
+
+    // Keep the existing checkout and its linked orders.
+    await prisma.checkoutPayment.update({
+      where: {
+        id: checkoutPayment.id,
+      },
+      data: {
+        provider: "razorpay",
+        providerOrderId: razorpayOrder.id,
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Retry payment initialized.",
+      checkoutPayment: {
+        id: checkoutPayment.id,
+        checkoutNumber: checkoutPayment.checkoutNumber,
+        amount: checkoutPayment.amount,
+        currency: checkoutPayment.currency,
+      },
+      razorpay: {
+        keyId: process.env.RAZORPAY_KEY_ID,
+        orderId: razorpayOrder.id,
+        amount: razorpayOrder.amount,
+        currency: razorpayOrder.currency,
+      },
+    });
+  } catch (error) {
+    console.error("Retry payment error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Unable to initialize payment retry.",
+    });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1740,6 +1575,21 @@ const getMyOrders = async (req, res) => {
             paidAt: true,
           },
         },
+
+
+checkoutPayment: {
+          select: {
+            id: true,
+            checkoutNumber: true,
+            amount: true,
+            currency: true,
+            method: true,
+            status: true,
+            provider: true,
+          },
+        },
+
+
       },
       orderBy: {
         createdAt: "desc",
@@ -2888,4 +2738,5 @@ module.exports = {
   cancelOrder,
   cancelCheckout,
   requestRefund,
+  retryPayment,
 };
