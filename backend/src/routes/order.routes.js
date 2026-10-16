@@ -11,6 +11,7 @@ const {
   cancelOrder,
   cancelCheckout, // NEW
   requestRefund,
+  retryPayment, // NEW
 } = require("../controllers/order.controller");
 
 const {
@@ -57,6 +58,17 @@ router.post(
 
 
 
+
+
+
+
+// CUSTOMER - RETRY PAYMENT
+router.post(
+  "/checkout/:checkoutPaymentId/retry-payment",
+  authenticate,
+  authorize("CUSTOMER"),
+  retryPayment
+);
 
 
 
