@@ -1,0 +1,331 @@
+.seller-earnings-page {
+  padding: 28px;
+  min-height: 100%;
+  background: #f6f8fb;
+  color: #172033;
+}
+
+.seller-earnings-container {
+  max-width: 1250px;
+  margin: 0 auto;
+}
+
+.seller-earnings-header,
+.seller-payouts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.seller-earnings-header h1,
+.seller-earnings-filter h2,
+.seller-earnings-results h2,
+.seller-payouts-header h2 {
+  margin: 0 0 8px;
+}
+
+.seller-earnings-header p,
+.seller-earnings-filter > p,
+.seller-payouts-header p {
+  margin: 0;
+  color: #697386;
+}
+
+.seller-earnings-refresh,
+.seller-earnings-date-form button {
+  border: 0;
+  border-radius: 9px;
+  background: #176b52;
+  color: #fff;
+  padding: 11px 17px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.seller-earnings-refresh:disabled,
+.seller-earnings-date-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.seller-earnings-error {
+  margin-bottom: 20px;
+  padding: 13px 16px;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.seller-earnings-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.seller-earnings-stat-card,
+.seller-earnings-period-card,
+.seller-earnings-filter,
+.seller-earnings-results,
+.seller-payouts-section {
+  padding: 22px;
+  border: 1px solid #e7ebf1;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 3px 12px rgb(20 35 60 / 4%);
+}
+
+.seller-earnings-stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.seller-earnings-stat-card span,
+.seller-earnings-result-grid span {
+  color: #697386;
+  font-size: 14px;
+}
+
+.seller-earnings-stat-card strong,
+.seller-earnings-period-card > strong {
+  font-size: 25px;
+  overflow-wrap: anywhere;
+}
+
+.seller-earnings-stat-card small {
+  color: #697386;
+}
+
+.seller-earnings-period-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.seller-earnings-period-card h2 {
+  margin: 0 0 14px;
+  font-size: 17px;
+}
+
+.seller-earnings-period-card > strong {
+  color: #176b52;
+}
+
+.seller-earnings-period-card p {
+  margin: 10px 0 0;
+  color: #697386;
+}
+
+.seller-earnings-filter,
+.seller-earnings-results,
+.seller-payouts-section {
+  margin-bottom: 22px;
+}
+
+.seller-earnings-filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.seller-earnings-filter-buttons button {
+  border: 1px solid #d8dee8;
+  border-radius: 9px;
+  background: #fff;
+  color: #344054;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.seller-earnings-filter-buttons button.active {
+  border-color: #176b52;
+  background: #176b52;
+  color: #fff;
+}
+
+.seller-earnings-date-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.seller-earnings-date-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.seller-earnings-date-form input {
+  min-height: 42px;
+  padding: 8px 10px;
+  border: 1px solid #d8dee8;
+  border-radius: 8px;
+  font: inherit;
+}
+
+.seller-earnings-period-label {
+  color: #697386;
+  margin-top: 0;
+}
+
+.seller-earnings-result-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.seller-earnings-result-grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 15px;
+  border-radius: 10px;
+  background: #f6f8fb;
+}
+
+.seller-earnings-result-grid strong {
+  overflow-wrap: anywhere;
+}
+
+.seller-payouts-empty {
+  padding: 30px 15px;
+  text-align: center;
+  color: #697386;
+}
+
+.seller-payouts-empty h3 {
+  margin: 0 0 8px;
+  color: #172033;
+}
+
+.seller-payouts-empty p {
+  margin: 0;
+}
+
+.seller-payouts-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.seller-payout-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 17px 0;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.seller-payout-item:last-child {
+  border-bottom: 0;
+}
+
+.seller-payout-main {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.seller-payout-main strong {
+  font-size: 18px;
+}
+
+.seller-payout-main > span,
+.seller-payout-main small {
+  color: #697386;
+  overflow-wrap: anywhere;
+}
+
+.seller-payout-failure {
+  color: #b91c1c !important;
+}
+
+.seller-payout-status {
+  flex-shrink: 0;
+  padding: 7px 11px;
+  border-radius: 999px;
+  background: #eef2f7;
+  color: #475467;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.seller-payout-status.paid,
+.seller-payout-status.completed,
+.seller-payout-status.success {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.seller-payout-status.processing,
+.seller-payout-status.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.seller-payout-status.failed,
+.seller-payout-status.rejected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+@media (max-width: 900px) {
+  .seller-earnings-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .seller-earnings-result-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .seller-earnings-page {
+    padding: 16px;
+  }
+
+  .seller-earnings-header {
+    align-items: flex-start;
+  }
+
+  .seller-earnings-stats,
+  .seller-earnings-period-grid,
+  .seller-earnings-result-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .seller-earnings-stat-card,
+  .seller-earnings-period-card,
+  .seller-earnings-filter,
+  .seller-earnings-results,
+  .seller-payouts-section {
+    padding: 17px;
+  }
+
+  .seller-earnings-date-form {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .seller-earnings-date-form input,
+  .seller-earnings-date-form button {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .seller-payout-item {
+    align-items: flex-start;
+  }
+}

@@ -21,6 +21,7 @@ import Orders from "./pages/Orders";
 
 import OrderDetails from "./pages/OrderDetails";
 import SellerApproval from "./pages/SellerApproval";
+import Earnings from "./pages/Earnings";
 
 
 import "./App.css";
@@ -268,6 +269,17 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
+
+
+          <Route
+  path="/earnings"
+  element={
+    <ProtectedRoute>
+      <Earnings />
+    </ProtectedRoute>
+  }
+/>
+
 
           <Route
             path="/orders/:orderId"

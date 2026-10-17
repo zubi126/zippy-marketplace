@@ -174,6 +174,39 @@ function Sidebar({ isOpen, onClose }) {
             <span className="sidebar-icon">▱</span>
             <span>Orders</span>
           </NavLink>
+
+
+
+
+
+
+          <NavLink
+            to="/earnings"
+            onClick={onClose}
+            className={({ isActive }) =>
+              `sidebar-link ${isActive ? "active" : ""}`
+            }
+          >
+            <span className="sidebar-icon">₹</span>
+            <span>Earnings</span>
+          </NavLink>
+
+          <NavLink
+            to="/earnings#payout-history"
+            onClick={onClose}
+            className={({ isActive }) =>
+              `sidebar-link ${isActive ? "active" : ""}`
+            }
+          >
+            <span className="sidebar-icon">↗</span>
+            <span>Payout History</span>
+          </NavLink>
+
+
+
+
+
+
         </nav>
 
       </div>
