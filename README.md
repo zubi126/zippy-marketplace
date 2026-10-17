@@ -1,366 +1,494 @@
+# MyKasho — Local Marketplace & Delivery Platform
 
-# Zippy — Hyperlocal Marketplace Backend
+**MyKasho** is a multi-vendor marketplace project designed to connect customers with local shops and sellers. The platform aims to make it easier for customers to discover products, place orders, make payments, and track deliveries through a single marketplace.
 
-Zippy is a hyperlocal multi-vendor marketplace platform designed to connect customers with local shops and businesses, initially focused on Anantnag, Jammu & Kashmir.
+The project includes a customer-facing frontend, seller dashboard, admin panel, rider-related functionality, and a backend API.
 
-The platform allows customers to discover products, place orders, track deliveries, and review products, while shopkeepers and riders manage their respective operations through role-based systems.
+> **Project status:** Under development. Features, integrations, and deployment configurations may change as development and testing continue.
 
 ---
 
-## 🚀 Project Status
+## Table of Contents
 
-**Backend:** In Active Development
+- [Overview](#overview)
+- [Key Features](#key-features)
+- [Platform Modules](#platform-modules)
+- [Technology Stack](#technology-stack)
+- [Project Structure](#project-structure)
+- [Backend Architecture](#backend-architecture)
+- [Order and Payment Flow](#order-and-payment-flow)
+- [Getting Started](#getting-started)
+- [Environment Variables](#environment-variables)
+- [Database Setup](#database-setup)
+- [Running the Application](#running-the-application)
+- [Testing](#testing)
+- [Security](#security)
+- [Development Roadmap](#development-roadmap)
+- [Contributing](#contributing)
+- [License](#license)
 
-### Completed
+---
 
-- Customer authentication with OTP
-- JWT-based authentication
-- Role-based authorization
+## Overview
+
+MyKasho is being developed as a local commerce platform with support for multiple sellers and order fulfillment workflows.
+
+The long-term goal is to support customers, shopkeepers, administrators, and delivery riders through connected interfaces and backend services.
+
+### Target Marketplace Categories
+
+- Grocery
+- Pharmacy
+- Electronics
+- Fashion
+- Local shops and other retail categories
+
+Actual category availability depends on the current implementation and configuration.
+
+## Key Features
+
+### Customer Platform
+
+- Customer authentication and profile management
+- Product discovery and browsing
+- Product categories and search
+- Shopping cart and quantity management
+- Saved delivery addresses
+- Checkout and order placement
+- Order history and order details
+- Order cancellation workflows
+- Online payment integration using Razorpay
+- Cash on Delivery support where configured
+- Checkout summary and payment verification
+- Product reviews and notifications where implemented
+
+### Seller Dashboard
+
+- Seller shop profile management
+- Product creation and management
+- Product pricing and stock management
+- Incoming order management
+- Order acceptance and preparation workflows
+- Order status updates
+- Seller earnings and payout-history interface
+
+Seller earnings and payout displays should be distinguished from actual settlements or payouts unless those financial workflows have been fully implemented and verified.
+
+### Admin Panel
+
+The planned administration functionality includes:
+
 - Shop management
-- Category management
 - Product management
-- Inventory management
-- Cart management
-- Address management
-- Order management
+- Order oversight
 - Rider management
-- Admin management
-- Delivery management
-- Real-time rider tracking with Socket.IO
-- Product reviews and ratings
-- Review update/delete protection
-- JWT security hardening
-- API rate limiting
-- OTP rate limiting
-- Input validation with Zod
-- Security headers with Helmet
+- Customer management
+- Payment and commission oversight
+- Marketplace analytics
 
-### In Progress
+The availability of each administrative operation depends on the implemented routes and permissions.
 
-- Web Push Notifications
-- Razorpay Payments
-- Payment & Order Accounting
-- Inventory Concurrency Hardening
+### Rider Functionality
+
+The planned rider workflow includes:
+
+- Rider profile management
+- Availability status
+- Delivery assignment
+- Order acceptance
+- Pickup and delivery status updates
+- Delivery history and earnings information
+
+Actual rider functionality depends on the current backend implementation.
 
 ---
 
-## 🏗️ Architecture
+## Platform Modules
 
-Zippy uses a centralized backend architecture with role-based access control.
+| Module | Purpose |
+|---|---|
+| Customer frontend | Product browsing, cart, checkout, and orders |
+| Seller dashboard | Shop, inventory, and order management |
+| Admin panel | Marketplace administration |
+| Rider functionality | Delivery assignment and fulfillment |
+| Backend API | Business logic, authentication, and data access |
+| PostgreSQL database | Persistent application data |
+| Razorpay integration | Online payment processing |
+| Cloudinary integration | Media and image management, where configured |
+| Socket.IO | Real-time communication, where configured |
 
-```text
-                    ZIPPY BACKEND
-                         │
-          ┌──────────────┼──────────────┐
-          │              │              │
-      CUSTOMER       SHOPKEEPER       RIDER
-          │              │              │
-          └──────────────┼──────────────┘
-                         │
-                    ADMIN SYSTEM
-                         │
-              ┌──────────┴──────────┐
-              │                     │
-          PostgreSQL            Socket.IO
-              │                     │
-            Prisma           Live Tracking
+---
 
+## Technology Stack
 
-👥 User Roles
+The project uses the following technologies in its current development setup. Exact versions should be checked in the relevant package files.
 
+### Frontend
+- React
+- JavaScript
+- CSS
+- React Router, where configured
 
-Customer
-
-Customers can:
-- Register/login using OTP
-- Browse categories
-- Browse products
-- Add products to cart
-- Manage addresses
-- Place orders
-- Track orders
-- Track riders in real time
-- Review purchased products
-- Update/delete their own reviews
-
-
-Shopkeeper
-Shopkeepers can:
-- Create/manage their shop
-- Manage shop status
-- Add products
-- Update product information
-- Manage inventory
-- View/manage orders
-- Update order preparation status
-
-
-Rider
-Riders can:
-- Manage rider profile
-- Manage availability/status
-- View assigned deliveries
-- Accept deliveries
-- Update delivery status
-- Share live location
-- Join authorized order tracking rooms
-
-Admin
-Admins can manage:
-- Customers
-- Shopkeepers
-- Shops
-- Riders
-- Products
-- Orders
-- Platform operations
-
-
-🔐 Authentication & Security
-Zippy uses JWT-based authentication combined with OTP verification.
-
-Security features currently implemented:
-- JWT authentication
-- JWT expiration
-- HS256 algorithm restriction
-- JWT required-claim validation
-- Role-based authorization
-- Resource ownership checks
-- OTP expiration
-- OTP attempt limits
-- OTP resend cooldown
-- API rate limiting
-- OTP-specific rate limiting
-- Zod request validation
-- Helmet security headers
-- Socket.IO authentication
-- Socket.IO order-room authorization
-Sensitive configuration is stored in environment variables.
-
-
-📱 Real-Time Tracking
-Zippy uses Socket.IO for real-time rider tracking.
-Rider Browser
-      │
-      │ Location Update
-      ↓
-   Socket.IO
-      │
-      ↓
- Order Room
-      │
-      ↓
-Customer Browser
-      │
-      ↓
-Live Rider Location
-Customers and riders can only join order rooms they are authorized to access.
-
-
-⭐ Reviews & Ratings
-Customers can review products from delivered orders.
-The review system includes:
-- 1–5 star ratings
-- Optional comments
-- Delivered-order verification
-- Product/order ownership verification
-- Duplicate review prevention
-- Average rating calculation
-- Review listing
-- Review updates
-- Review deletion
-- Customer ownership protection
-
-
-🛠️ Tech Stack
-Backend
+### Backend
 - Node.js
 - Express.js
-- JavaScript
-- PostgreSQL
 - Prisma ORM
-- JWT
+- PostgreSQL
+- Zod validation
 - Socket.IO
 
+### Integrations
+- Razorpay for online payments
+- Cloudinary for media storage
+- OTP-based authentication and related services, where configured
 
-Security & Validation
-- Helmet
-- express-rate-limit
-- Zod
-- bcryptjs
-- JSON Web Tokens
-Planned Integrations
-- Razorpay
-- Web Push Notifications
-- Payment settlement / marketplace payments
+### Development Tools
+- Git and GitHub
+- Visual Studio Code
+- npm
+- PostgreSQL tools, including pgAdmin and SQL Shell
 
+---
 
+## Project Structure
 
+The repository contains separate application areas for the backend and frontend interfaces.
 
-📂 Backend Structure
-backend/
+```text
+anantnag-marketplace/
 │
-├── prisma/
-│   ├── migrations/
-│   └── schema.prisma
-│
-├── src/
+├── backend/
 │   ├── controllers/
-│   ├── middleware/
 │   ├── routes/
-│   ├── services/
+│   ├── middleware/
 │   ├── validators/
-│   └── lib/
+│   ├── services/
+│   ├── prisma/
+│   │   ├── schema.prisma
+│   │   └── migrations/
+│   ├── config/
+│   ├── package.json
+│   └── server.js
 │
-├── socket-test.js
-├── socket-customer-test.js
-├── server.js
-├── package.json
-├── package-lock.json
-├── .env
-└── .env.example
+├── seller/
+│   └── src/
+│       ├── components/
+│       ├── pages/
+│       └── App.jsx
+│
+├── admin/
+│   └── ...
+│
+└── README.md
+```
 
+**Note:** This is a high-level illustration of the project layout, not a guaranteed exhaustive file listing. Check the actual repository for the current locations and names of every folder.
 
+---
 
-⚙️ Installation
-Clone the repository:
-git clone YOUR_REPOSITORY_URL
+## Backend Architecture
 
-Move into the backend:
-cd anantnag-marketplace/backend
+The backend follows a modular API structure.
 
-Install dependencies:
+### Routes
+
+Routes define API endpoints and connect incoming requests to the appropriate controllers. Route modules cover areas such as authentication, products, shops, customers, carts, orders, riders, reviews, notifications, and administration.
+
+### Controllers
+
+Controllers handle incoming requests, validate or interpret request data, invoke the necessary business logic, and return API responses.
+
+### Middleware
+
+Middleware supports shared request-processing tasks such as authentication, authorization, and validation.
+
+### Validators
+
+Zod schemas and other validation logic help validate incoming request data before business operations are performed.
+
+### Services
+
+Service modules contain reusable business logic, including payment processing and delivery-related operations where implemented.
+
+### Prisma and PostgreSQL
+
+Prisma provides database access through the configured Prisma Client. Database schema changes are managed through Prisma migrations.
+
+The exact responsibilities of each module should be confirmed against the current source code.
+
+---
+
+## Order and Payment Flow
+
+The intended customer order flow is:
+
+1. Browse products.
+2. Add products to the cart.
+3. Review the cart and checkout summary.
+4. Select a delivery address.
+5. Choose an available payment method.
+6. Complete checkout.
+7. Verify online payment when applicable.
+8. Create or confirm the relevant order records.
+9. Track the order through the supported status workflow.
+
+### Multi-Seller Checkout
+
+The backend has been extended to support a combined checkout payment workflow involving multiple shops. The checkout-payment model and associated order relationships have been added through database migrations.
+
+The exact transaction boundaries, failure handling, refund behavior, and seller settlement process should be verified against the current implementation before being treated as production-ready.
+
+### Razorpay
+
+The backend includes payment-related functionality for operations such as:
+
+- Creating a Razorpay order
+- Verifying payment signatures
+- Handling checkout payment records
+- Supporting cancellation and refund workflows where implemented
+
+**Important:** Payment verification must happen on the server. Client-side payment success alone must not be treated as proof of a verified payment.
+
+Razorpay settlement and seller payout functionality must be configured and tested separately where required.
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+Install the tools required by the relevant project modules:
+
+- Node.js and npm
+- PostgreSQL
+- Git
+- A code editor such as Visual Studio Code
+
+You will also need valid credentials for any external services you intend to run, such as Razorpay or Cloudinary.
+
+### 1. Clone the Repository
+
+```bash
+git clone <YOUR_GITHUB_REPOSITORY_URL>
+cd anantnag-marketplace
+```
+
+Replace `<YOUR_GITHUB_REPOSITORY_URL>` with the actual repository URL.
+
+### 2. Install Backend Dependencies
+
+```bash
+cd backend
 npm install
+```
 
-🔑 Environment Variables
-Create a .env file in the backend directory.
-Example:
-PORT=5000
+### 3. Configure Environment Variables
 
-DATABASE_URL="your_database_url"
+Create a local `.env` file using the variables required by the backend configuration.
 
-JWT_SECRET="your_jwt_secret"
-JWT_EXPIRES_IN="7d"
+Do not copy real production secrets into the repository.
 
-TWOFACTOR_API_KEY="your_2factor_api_key"
-Never commit the real .env file to GitHub.
-Use .env.example as the configuration reference.
+### 4. Configure PostgreSQL
 
-🗄️ Database Setup
-After configuring the database:
-npx prisma migrate dev
-Generate Prisma Client if required:
+Create a PostgreSQL database and configure the database connection string.
+
+Ensure that the database user has the permissions required by Prisma.
+
+### 5. Generate Prisma Client
+
+From the backend directory, run the command supported by the installed Prisma version and project configuration:
+
+```bash
 npx prisma generate
+```
 
-▶️ Running the Backend
-Development:
+### 6. Apply Database Migrations
+
+For an existing database and a deployed or shared environment, use the appropriate migration deployment workflow:
+
+```bash
+npx prisma migrate deploy
+```
+
+For local development, `npx prisma migrate dev` can be used when appropriate. Follow the project's current Prisma configuration and migration history.
+
+**Do not reset or delete an existing database simply to make migrations run.** Back up important data before performing database changes.
+
+### 7. Start the Backend
+
+Check the scripts in `backend/package.json` to determine the configured start command. A common development command is:
+
+```bash
 npm run dev
-Production:
-npm start
+```
 
-The API runs by default on:
-http://localhost:5000
+If this script is not defined, use the actual script configured in the project.
 
-🧪 API Health Check
-Open:
+---
 
-GET /
-Expected response:
+## Environment Variables
 
-{
-  "message": "Anantnag Marketplace API is running"
-}
+The exact required variables depend on the current configuration files. Common examples may include:
 
+```env
+DATABASE_URL=
+PORT=
 
-Database health check:
-GET /db-test
+JWT_SECRET=
 
+RAZORPAY_KEY_ID=
+RAZORPAY_KEY_SECRET=
 
-🔌 Main API Modules
-/api/auth
-/api/shops
-/api/shop
-/api/admin
-/api/categories
-/api/products
-/api/cart
-/api/addresses
-/api/orders
-/api/riders
-/api/reviews
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+```
 
+Additional variables may be required for OTP delivery, frontend URLs, CORS, Socket.IO, or other integrations.
 
-🔔 Planned Web Push Notifications
+These names are illustrative. Confirm the actual variable names and requirements by inspecting the backend configuration before starting the application.
 
-Zippy will support browser-based push notifications for:
-- New orders
-- Order acceptance
-- Order preparation
-- Order ready for pickup
-- Rider assignment
-- Rider pickup
-- Delivery updates
-- Order completion
-Notifications will work directly through supported web browsers, so a dedicated mobile application is not required for the initial implementation.
+### Secret Management
 
+- Never commit `.env` files containing credentials.
+- Never expose payment secrets or authentication secrets in frontend code.
+- Use separate credentials for development and production.
+- Rotate credentials immediately if they are accidentally exposed.
+- Keep database backups and production data outside public repositories.
 
-💳 Planned Payments
+---
 
-Razorpay will be integrated for online payments.
+## Database Setup
 
-Planned payment flow:
-Customer
-    ↓
-Create Order
-    ↓
-Razorpay Payment
-    ↓
-Payment Verification
-    ↓
-Order Confirmation
-Marketplace settlement through Razorpay Route will be integrated after the required Razorpay activation/approval is available.
+The project uses PostgreSQL with Prisma.
 
+Database models and migration history are maintained in the backend's Prisma configuration.
 
-🗺️ Roadmap
+The project has included migrations for checkout payment functionality and cancelled payment status. Before deploying, verify that every required migration has been applied successfully and that the generated Prisma Client matches the schema.
 
-[x] Authentication & OTP
-[x] Role-based authorization
-[x] Shops
-[x] Categories
-[x] Products
-[x] Inventory
-[x] Cart
-[x] Addresses
-[x] Orders
-[x] Riders
-[x] Admin operations
-[x] Real-time tracking
-[x] Reviews & Ratings
-[x] Security hardening
+Useful commands include:
 
-[ ] Web Push Notifications
-[ ] Razorpay Payments
-[ ] Payment & Order Accounting
-[ ] Inventory Concurrency Hardening
-[ ] Final API Security Audit
-[ ] Production Deployment
-[ ] Customer Web Frontend
-[ ] Shopkeeper Dashboard
-[ ] Rider Dashboard
-[ ] Admin Dashboard
+```bash
+npx prisma validate
+npx prisma generate
+npx prisma migrate status
+```
 
+Run these commands from the backend directory, using the project's installed Prisma version and configuration.
 
-📌 Development Approach
-Zippy is being developed as a modular backend where:
-- Authentication is centralized
-- Authorization is role-based
-- Business logic is separated into controllers/services
-- Database access is handled through Prisma
-- Real-time functionality uses Socket.IO
-- Security is handled through dedicated middleware
-- External payment and notification services are isolated from core business logic
+---
 
+## Running the Application
 
-📄 License
-This project is currently under private development.
-All rights reserved.
+Each frontend or backend module may have its own package configuration and development command.
+
+To run a module:
+
+1. Open its directory.
+2. Install dependencies if needed.
+3. Configure the required environment variables.
+4. Start it using the scripts in that module's `package.json`.
+
+The backend, seller dashboard, and admin panel may require separate development servers.
+
+Frontend API base URLs, authentication configuration, and backend CORS settings must be aligned for local development.
+
+Deployment instructions should be updated when the final hosting providers, production domains, and environment configuration are confirmed.
+
+---
+
+## Testing
+
+Testing is being performed incrementally across the platform.
+
+The planned test areas include:
+
+- Shopkeeper profile creation and updates
+- Shop status management
+- Rider profile and vehicle information
+- Customer profiles and addresses
+- Cart operations
+- Customer order workflows
+- Admin shop and rider management
+- Product creation, updates, deletion, search, and listing
+- Order creation, updates, cancellation, and listing
+- Payment creation, verification, refunds, and settlement-related workflows
+- Other API and integration tests
+
+### Testing Principles
+
+- Run tests against the intended environment.
+- Confirm authentication and authorization for protected routes.
+- Test invalid inputs and error responses.
+- Verify database changes after successful operations.
+- Test payment failure, cancellation, and duplicate-request scenarios.
+- Record results so previously passed tests do not need to be repeated unnecessarily.
+
+Do not assume every listed test has passed. Maintain a separate record of completed, failed, and pending tests.
+
+---
+
+## Security
+
+Security is an important requirement for a marketplace handling customer information and payments.
+
+Development and production configurations should enforce:
+
+- Authentication for protected endpoints
+- Role-based authorization for customers, sellers, riders, and administrators
+- Server-side validation of user input
+- Secure handling of payment credentials
+- Server-side payment-signature verification
+- Appropriate access controls for customer and order data
+- Safe handling of uploaded files
+- Rate limiting and abuse protection where appropriate
+- Secure production environment variables
+- Appropriate logging without exposing sensitive data
+
+A feature should be considered production-ready only after its relevant security and failure scenarios have been reviewed.
+
+---
+
+## Development Roadmap
+
+The planned development and verification work includes:
+
+- Complete and verify seller workflows
+- Complete and verify rider workflows
+- Validate customer profiles, addresses, carts, and orders
+- Verify admin management operations
+- Verify product CRUD and search functionality
+- Test complete order lifecycle scenarios
+- Verify payment verification, cancellations, and refunds
+- Confirm settlement and payout requirements
+- Complete integration and regression testing
+- Prepare production deployment and monitoring
+
+Roadmap items may change as implementation and testing progress.
+
+---
+
+## Contributing
+
+Contributions and development improvements are welcome.
+
+Before submitting changes:
+
+1. Review the existing project structure.
+2. Avoid committing secrets, backups, database dumps, or private data.
+3. Keep changes focused and maintainable.
+4. Test the affected functionality.
+5. Document new environment variables and setup requirements.
+6. Provide a clear commit message describing the change.
+
+For larger changes, describe the intended behavior and any migration or deployment requirements before implementation.
+
+---
+
+## License
+
+A license has not been specified in this README. Unless a license is added to the repository, reuse and redistribution permissions should not be assumed.
+
+---
+
+**MyKasho — Building a connected local marketplace experience.**
