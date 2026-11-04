@@ -115,6 +115,7 @@ const customerRoutes = require("./routes/customer.routes");
 const path = require("path");
 
 const app = express();
+app.set("trust proxy", 1);
 
 app.use(helmet());
 
@@ -131,6 +132,7 @@ const globalLimiter = rateLimit({
 
 const allowedOrigins = [
   "https://www.mykasho.com",
+  "https://mykasho.com",
   "https://seller.mykasho.com",
   "https://rider.mykasho.com",
   "https://adminmykasho.mykasho.com",
