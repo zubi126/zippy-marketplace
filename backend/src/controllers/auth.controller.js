@@ -300,8 +300,33 @@ const registerShopkeeper = async (req, res) => {
     // Hash password
     const passwordHash = await bcrypt.hash(password, 12);
 
-    // Create user + shop together
+    
+    // Create user + shop and consume OTP together
     const result = await prisma.$transaction(async (tx) => {
+      // Step 1: Consume OTP only if it is still valid and unused
+      const consumedOtp = await tx.otpVerification.updateMany({
+        where: {
+          id: verificationId,
+          phone,
+          purpose: "SHOPKEEPER_REGISTRATION",
+          verified: true,
+          invalidatedAt: null,
+          consumedAt: null,
+          expiresAt: {
+            gt: new Date(),
+          },
+        },
+        data: {
+          consumedAt: new Date(),
+        },
+      });
+
+      // Step 2: Stop registration if OTP is invalid or already used
+      if (consumedOtp.count !== 1) {
+        return { otpInvalid: true };
+      }
+
+      // Step 3: Create user
       const user = await tx.user.create({
         data: {
           name,
@@ -312,6 +337,7 @@ const registerShopkeeper = async (req, res) => {
         },
       });
 
+      // Step 4: Create shop
       const shop = await tx.shop.create({
         data: {
           ownerId: user.id,
@@ -327,6 +353,16 @@ const registerShopkeeper = async (req, res) => {
 
       return { user, shop };
     });
+
+    // Step 5: Return an error if OTP could not be consumed
+    if (result.otpInvalid) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "OTP is invalid, expired or already used. Please verify your phone again",
+      });
+    }
+
 
     // Generate JWT
     const token = jwt.sign(
@@ -456,7 +492,33 @@ const registerRider = async (req, res) => {
     const passwordHash = await bcrypt.hash(password, 12);
 
     // Create user + rider profile together
+ 
+    // Create user + rider profile and consume OTP together
     const result = await prisma.$transaction(async (tx) => {
+      // Step 1: Consume OTP only if it is still valid and unused
+      const consumedOtp = await tx.otpVerification.updateMany({
+        where: {
+          id: verificationId,
+          phone,
+          purpose: "RIDER_REGISTRATION",
+          verified: true,
+          invalidatedAt: null,
+          consumedAt: null,
+          expiresAt: {
+            gt: new Date(),
+          },
+        },
+        data: {
+          consumedAt: new Date(),
+        },
+      });
+
+      // Step 2: Stop registration if OTP is invalid or already used
+      if (consumedOtp.count !== 1) {
+        return { otpInvalid: true };
+      }
+
+      // Step 3: Create user
       const user = await tx.user.create({
         data: {
           name,
@@ -467,6 +529,7 @@ const registerRider = async (req, res) => {
         },
       });
 
+      // Step 4: Create rider profile
       const rider = await tx.rider.create({
         data: {
           userId: user.id,
@@ -477,6 +540,16 @@ const registerRider = async (req, res) => {
 
       return { user, rider };
     });
+
+    // Step 5: Return error if OTP could not be consumed
+    if (result.otpInvalid) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "OTP is invalid, expired or already used. Please verify your phone again",
+      });
+    }
+
 
     // Generate JWT
     const token = jwt.sign(
@@ -837,7 +910,7 @@ const forgotPassword = async (req, res) => {
 
     // 2Factor API
     const apiUrl =
-      `https://2factor.in/API/V1/${process.env.TWOFACTOR_API_KEY}/SMS/${phone}/AUTOGEN/Zippy%20Login%20OTP`;
+      `https://2factor.in/API/V1/${process.env.TWOFACTOR_API_KEY}/SMS/${phone}/AUTOGEN/MyKasho+Login+OTP`;
 
     const response = await fetch(apiUrl);
 
@@ -878,6 +951,12 @@ const forgotPassword = async (req, res) => {
     });
   }
 };
+
+
+
+
+
+
 
 
 
@@ -1009,74 +1088,78 @@ const verifyForgotPasswordOtp = async (req, res) => {
 
 
 
+
+
+
+
+
+
+
+
 const resetPassword = async (req, res) => {
   try {
-    const {
-      phone,
-      verificationId,
-      newPassword,
-    } = req.body;
+    const { phone, verificationId, newPassword } = req.body;
 
-    // Basic validation
     if (!phone || !verificationId || !newPassword) {
       return res.status(400).json({
         success: false,
-        message:
-          "Phone, verificationId and new password are required",
+        message: "Phone, verificationId and new password are required",
       });
     }
 
-    // Check verified OTP
-    const otpVerification = await prisma.otpVerification.findFirst({
-      where: {
-        id: verificationId,
-        phone,
-        purpose: "PASSWORD_RESET",
-        verified: true,
-      },
+    if (!/^[6-9]\d{9}$/.test(phone)) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid 10-digit Indian phone number",
+      });
+    }
+
+    if (typeof newPassword !== "string" || newPassword.length < 8) {
+      return res.status(400).json({
+        success: false,
+        message: "Password must be at least 8 characters long",
+      });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { phone },
+      select: { id: true },
     });
 
-    if (!otpVerification) {
+    if (!user) {
       return res.status(400).json({
         success: false,
         message: "Password reset verification is invalid",
       });
     }
 
-    // Check OTP verification expiry
-    if (new Date() > otpVerification.expiresAt) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Password reset verification has expired. Please verify OTP again",
-      });
-    }
-
-    // Check user
-    const user = await prisma.user.findUnique({
-      where: {
-        phone,
-      },
-    });
-
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-    }
-
-    // Hash new password
     const passwordHash = await bcrypt.hash(newPassword, 12);
+    const now = new Date();
 
-    // Update password
-    await prisma.user.update({
-      where: {
-        id: user.id,
-      },
-      data: {
-        passwordHash,
-      },
+    await prisma.$transaction(async (tx) => {
+      const consumedOtp = await tx.otpVerification.updateMany({
+        where: {
+          id: verificationId,
+          phone,
+          purpose: "PASSWORD_RESET",
+          verified: true,
+          invalidatedAt: null,
+          consumedAt: null,
+          expiresAt: { gt: now },
+        },
+        data: {
+          consumedAt: now,
+        },
+      });
+
+      if (consumedOtp.count !== 1) {
+        throw new Error("PASSWORD_RESET_OTP_INVALID");
+      }
+
+      await tx.user.update({
+        where: { id: user.id },
+        data: { passwordHash },
+      });
     });
 
     return res.status(200).json({
@@ -1084,6 +1167,13 @@ const resetPassword = async (req, res) => {
       message: "Password reset successfully",
     });
   } catch (error) {
+    if (error.message === "PASSWORD_RESET_OTP_INVALID") {
+      return res.status(400).json({
+        success: false,
+        message: "Password reset verification is invalid, expired or already used",
+      });
+    }
+
     console.error("Reset password error:", error);
 
     return res.status(500).json({
@@ -1092,7 +1182,6 @@ const resetPassword = async (req, res) => {
     });
   }
 };
-
 
 
 
@@ -1164,7 +1253,7 @@ if (!validPurposes.includes(purpose)) {
 
     // 2Factor API
     const apiUrl =
-      `https://2factor.in/API/V1/${process.env.TWOFACTOR_API_KEY}/SMS/${phone}/AUTOGEN/Zippy%20Login%20OTP`;
+      `https://2factor.in/API/V1/${process.env.TWOFACTOR_API_KEY}/SMS/${phone}/AUTOGEN/MyKasho+Login+OTP`;
 
     const response = await fetch(apiUrl);
 
@@ -1289,7 +1378,7 @@ if (!validPurposes.includes(purpose)) {
 
     // Send new OTP through 2Factor
     const apiUrl =
-      `https://2factor.in/API/V1/${process.env.TWOFACTOR_API_KEY}/SMS/${phone}/AUTOGEN/Zippy%20Login%20OTP`;
+      `https://2factor.in/API/V1/${process.env.TWOFACTOR_API_KEY}/SMS/${phone}/AUTOGEN/MyKasho+Login+OTP`;
 
     const response = await fetch(apiUrl);
     const data = await response.json();
