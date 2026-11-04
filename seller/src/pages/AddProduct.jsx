@@ -38,27 +38,53 @@ function AddProduct() {
 
 
 
-  const fetchCategories = async () => {
-    try {
-      setLoadingCategories(true);
+  // const fetchCategories = async () => {
+  //   try {
+  //     setLoadingCategories(true);
 
-      const response = await api.get("/categories");
+  //     const response = await api.get("/categories");
 
-      setCategories(response.data.categories || []);
-    } catch (error) {
-      console.error(
-        "Failed to fetch categories:",
-        error
-      );
+  //     setCategories(response.data.categories || []);
+  //   } catch (error) {
+  //     console.error(
+  //       "Failed to fetch categories:",
+  //       error
+  //     );
 
-      setError(
-        error.response?.data?.message ||
-          "Unable to load categories."
-      );
-    } finally {
-      setLoadingCategories(false);
-    }
-  };
+  //     setError(
+  //       error.response?.data?.message ||
+  //         "Unable to load categories."
+  //     );
+  //   } finally {
+  //     setLoadingCategories(false);
+  //   }
+  // };
+
+
+
+
+const fetchCategories = async () => {
+  try {
+    setLoadingCategories(true);
+
+    const response = await api.get("/categories");
+
+    console.log("CATEGORY API RESPONSE:", response.data);
+
+    setCategories(response.data.categories || []);
+  } catch (error) {
+    console.error("Failed to fetch categories:", error);
+    setError(
+      error.response?.data?.message ||
+      "Unable to load categories."
+    );
+  } finally {
+    setLoadingCategories(false);
+  }
+};
+
+
+
 
 
 
