@@ -643,10 +643,19 @@ function Header() {
             Need Help?
           </button>
 
-          <button type="button">
-            <Icon name="store" size={15} />
-            Become a Seller
-          </button>
+         <button
+  type="button"
+  onClick={() =>
+    window.open(
+      "https://seller.mykasho.com/register",
+      "_blank",
+      "noopener,noreferrer"
+    )
+  }
+>
+  <Icon name="store" size={15} />
+  Become a Seller
+</button>
 
           <button
             type="button"

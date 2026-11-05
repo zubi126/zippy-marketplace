@@ -83,6 +83,24 @@ function Footer() {
             <li><Link to="/addresses">My Addresses</Link></li>
           </ul>
         </div>
+
+
+<div className="footer-column">
+  <h3>For Sellers</h3>
+  <ul>
+    <li>
+      <a
+        href="https://seller.mykasho.com/register"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Become a Seller
+      </a>
+    </li>
+  </ul>
+</div>
+
+
       </div>
 
       <div className="footer-bottom">
