@@ -499,13 +499,7 @@ function Header() {
       icon: "shirt",
       tone: "violet",
     },
-    {
-      name: "Local Shops",
-      subtitle: "Your Nearby Stores",
-      path: "/shops",
-      icon: "store",
-      tone: "amber",
-    },
+   
 
 
     {
@@ -536,6 +530,14 @@ function Header() {
   icon: "receipt",
   tone: "blue",
 },
+
+ {
+      name: "Local Shops",
+      subtitle: "Your Nearby Stores",
+      path: "/shops",
+      icon: "store",
+      tone: "amber",
+    },
   ];
 
   useEffect(() => {
