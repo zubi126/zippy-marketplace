@@ -178,7 +178,7 @@ const createOrder = async (req, res) => {
         "4d0e142c-8b95-4b33-8b99-b3492711f341"
     );
 
-    const commissionRate = 10;
+    const commissionRate = 5;
 
     const orderCalculations = nonEmptyCarts.map((cart) => {
       const subtotal = cart.items.reduce(
