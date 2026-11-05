@@ -506,6 +506,36 @@ function Header() {
       icon: "store",
       tone: "amber",
     },
+
+
+    {
+  name: "Hardware",
+  subtitle: "Tools & Building Supplies",
+  path: "/products?category=hardware",
+  icon: "package",
+  tone: "amber",
+},
+{
+  name: "Flowers & Gifts",
+  subtitle: "Flowers, Bouquets & Gifts",
+  path: "/products?category=flowers-gifts",
+  icon: "tag",
+  tone: "rose",
+},
+{
+  name: "Sports & Fitness",
+  subtitle: "Sports & Fitness Equipment",
+  path: "/products?category=sports%20%26%20fitness",
+  icon: "flame",
+  tone: "green",
+},
+{
+  name: "Stationery & Books",
+  subtitle: "Books & School Supplies",
+  path: "/products?category=stationery%20%26%20books",
+  icon: "receipt",
+  tone: "blue",
+},
   ];
 
   useEffect(() => {
@@ -680,6 +710,10 @@ function Header() {
               <option value="beauty-cosmetics">Beauty & Cosmetics</option>
               <option value="electronics">Electronics</option>
               <option value="fashion">Fashion</option>
+              <option value="hardware">Hardware</option>
+             <option value="flowers-gifts">Flowers & Gifts</option>
+            <option value="sports & fitness">Sports & Fitness</option>
+             <option value="stationery & books">Stationery & Books</option>
               <option value="shops">Local Shops</option>
             </select>
           </div>
