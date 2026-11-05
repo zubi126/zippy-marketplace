@@ -131,12 +131,7 @@ const ShopDetails = () => {
               <strong>{shop.address}</strong>
             </div>
 
-            {shop.phone && (
-              <div className="shop-information-item">
-                <span>Phone</span>
-                <strong>{shop.phone}</strong>
-              </div>
-            )}
+            
 
             <div className="shop-information-item">
               <span>Status</span>
