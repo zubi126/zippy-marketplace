@@ -524,3 +524,64 @@
     flex: 1;
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* FEATURED ACTIONS */
+
+.featured-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+
+.featured-toggle-button {
+  min-height: 29px;
+  padding: 5px 10px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.make-featured {
+  background: #ecfdf3;
+  border-color: #bbf7d0;
+  color: #15803d;
+}
+
+.make-featured:hover:not(:disabled) {
+  background: #15803d;
+  color: #ffffff;
+}
+
+.remove-featured {
+  background: #fff7ed;
+  border-color: #fed7aa;
+  color: #c2410c;
+}
+
+.remove-featured:hover:not(:disabled) {
+  background: #c2410c;
+  color: #ffffff;
+}
+
+.featured-toggle-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}

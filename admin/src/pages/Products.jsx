@@ -8,6 +8,7 @@ function Products() {
   const [error, setError] = useState("");
 
   const [status, setStatus] = useState("ALL");
+  const [updatingFeaturedId, setUpdatingFeaturedId] = useState(null);
 
   const [pagination, setPagination] = useState({
     page: 1,
@@ -76,6 +77,37 @@ function Products() {
       fetchProducts(pagination.page + 1, status);
     }
   };
+
+
+
+
+
+const handleToggleFeatured = async (product) => {
+  try {
+    setUpdatingFeaturedId(product.id);
+
+    await api.patch(
+      `/admin/products/${product.id}/featured`,
+      {
+        isFeatured: !product.isFeatured,
+      }
+    );
+
+    await fetchProducts(pagination.page, status);
+  } catch (error) {
+    console.error("Failed to update featured status:", error);
+
+    alert(
+      error.response?.data?.message ||
+        "Unable to update featured status."
+    );
+  } finally {
+    setUpdatingFeaturedId(null);
+  }
+};
+
+
+
 
   const formatAmount = (amount) => {
     if (amount === null || amount === undefined) {
@@ -309,17 +341,34 @@ function Products() {
                         </span>
                       </td>
 
-                      <td>
-                        {product.isFeatured ? (
-                          <span className="featured-badge">
-                            ★ Featured
-                          </span>
-                        ) : (
-                          <span className="not-featured-badge">
-                            Not Featured
-                          </span>
-                        )}
-                      </td>
+                    <td>
+  <div className="featured-actions">
+    {product.isFeatured ? (
+      <span className="featured-badge">
+        ★ Featured
+      </span>
+    ) : (
+      <span className="not-featured-badge">
+        Not Featured
+      </span>
+    )}
+
+    <button
+      type="button"
+      className={`featured-toggle-button ${
+        product.isFeatured ? "remove-featured" : "make-featured"
+      }`}
+      onClick={() => handleToggleFeatured(product)}
+      disabled={updatingFeaturedId === product.id}
+    >
+      {updatingFeaturedId === product.id
+        ? "Updating..."
+        : product.isFeatured
+          ? "Remove"
+          : "★ Make Featured"}
+    </button>
+  </div>
+</td>
 
                       <td>
                         <div className="date-info">
