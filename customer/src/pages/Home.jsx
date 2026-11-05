@@ -221,6 +221,48 @@ emoji: "💄",
     className: "shops-card",
     emoji: "🏪",
   },
+
+
+
+  {
+  title: "Hardware",
+  subtitle: "Tools & Supplies",
+  description: "Hardware, tools & building essentials",
+  button: "Shop Hardware",
+  path: "/products?category=hardware",
+  className: "hardware-card",
+  emoji: "🔧",
+},
+{
+  title: "Flowers & Gifts",
+  subtitle: "Make Every Moment Special",
+  description: "Fresh flowers, bouquets & gifts",
+  button: "Shop Flowers",
+  path: "/products?category=flowers-gifts",
+  className: "flowers-card",
+  emoji: "💐",
+},
+{
+  title: "Sports & Fitness",
+  subtitle: "Stay Active",
+  description: "Sports equipment & fitness accessories",
+  button: "Shop Sports",
+  path: "/products?category=sports%20%26%20fitness",
+  className: "sports-card",
+  emoji: "🏏",
+},
+{
+  title: "Stationery & Books",
+  subtitle: "Everything for Learning",
+  description: "Books, notebooks & school supplies",
+  button: "Shop Stationery",
+  path: "/products?category=stationery%20%26%20books",
+  className: "stationery-card",
+  emoji: "📚",
+},
+
+
+
 ];
 
 function Home() {
@@ -436,6 +478,34 @@ decoding="async"
   title="Beauty & Cosmetics"
   category="beauty-cosmetics"
 />
+
+
+
+
+
+
+
+
+<CategoryProductSection
+  title="Hardware"
+  category="hardware"
+/>
+
+<CategoryProductSection
+  title="Flowers & Gifts"
+  category="flowers-gifts"
+/>
+
+<CategoryProductSection
+  title="Sports & Fitness"
+  category="sports & fitness"
+/>
+
+<CategoryProductSection
+  title="Stationery & Books"
+  category="stationery & books"
+/>
+
 
 
 

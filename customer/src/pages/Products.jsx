@@ -80,13 +80,31 @@ const sortedProducts = [...products].sort((a, b) => {
 
 
   
+// const pageTitle = search
+//   ? `Search results for "${search}"`
+//   : category === "beauty-cosmetics"
+//   ? "Beauty & Cosmetics"
+//     : category
+//       ? category.charAt(0).toUpperCase() + category.slice(1)
+//       : "All Products";
+
+
+const categoryTitles = {
+  grocery: "Grocery",
+  "beauty-cosmetics": "Beauty & Cosmetics",
+  electronics: "Electronics",
+  fashion: "Fashion",
+  hardware: "Hardware",
+  "flowers-gifts": "Flowers & Gifts",
+  "sports & fitness": "Sports & Fitness",
+  "stationery & books": "Stationery & Books",
+};
+
 const pageTitle = search
   ? `Search results for "${search}"`
-  : category === "beauty-cosmetics"
-  ? "Beauty & Cosmetics"
-    : category
-      ? category.charAt(0).toUpperCase() + category.slice(1)
-      : "All Products";
+  : category
+    ? categoryTitles[category] || category
+    : "All Products";
 
 
   return (
@@ -179,6 +197,54 @@ const pageTitle = search
               >
                 Fashion
               </button>
+
+
+
+
+
+
+
+
+
+<button
+  onClick={() =>
+    navigate("/products?category=hardware")
+  }
+>
+  Hardware
+</button>
+
+<button
+  onClick={() =>
+    navigate("/products?category=flowers-gifts")
+  }
+>
+  Flowers & Gifts
+</button>
+
+<button
+  onClick={() =>
+    navigate("/products?category=sports%20%26%20fitness")
+  }
+>
+  Sports & Fitness
+</button>
+
+<button
+  onClick={() =>
+    navigate("/products?category=stationery%20%26%20books")
+  }
+>
+  Stationery & Books
+</button>
+
+
+
+
+
+
+
+
             </div>
           </aside>
 
