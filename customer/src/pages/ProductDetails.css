@@ -103,14 +103,31 @@
   color: #079455;
 }
 
-.product-description {
+/* .product-description {
   max-width: 600px;
 
   margin-top: 22px;
 
   color: #667085;
   line-height: 1.7;
+} */
+
+
+.product-description {
+  max-width: 600px;
+  margin-top: 22px;
+
+  color: #667085;
+  line-height: 1.8;
+
+  white-space: pre-line;
+  overflow-wrap: break-word;
 }
+
+
+
+
+
 
 .product-actions {
   display: flex;
