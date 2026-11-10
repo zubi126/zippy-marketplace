@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://mykasho.com/sitemap.xml
+Sitemap: https://www.mykasho.com/sitemap.xml
